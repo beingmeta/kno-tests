@@ -18,7 +18,7 @@ XCFLAGS		=
 CFLAGS          = -I../../include @CFLAGS@ @PROFILING@ @GCOV_CFLAGS@ \
 		  @DREENTRANT@ @dynamic_cflag@ 		\
 		  -I../../include $(XCFLAGS)
-LDFLAGS         =-L../../lib @LDFLAGS@ $(EFENCE) @TESTLDFLAGS@ @GCOV_LDFLAGS@ -L../../lib 
+LDFLAGS         =-L../../lib @LDFLAGS@ $(EFENCE) @TESTLDFLAGS@ @GCOV_LDFLAGS@ -L../../lib
 RPATH           = @rpath@
 RPATHFLAGS      = @RPATHFLAGS@
 BASELIBS        = @LIBS@ -lm -lz
@@ -26,6 +26,7 @@ BMLIBS          = -lu8stdio -lu8io -lu8data -lu8
 LIBS            = $(BASELIBS) $(BMLIBS)
 EXEFLAGS        = @EXEFLAGS@
 EXELIBS         = @EXELIBS@
+
 DESTDIR		=
 prefix		= @prefix@
 exec_prefix	= @exec_prefix@
@@ -39,13 +40,23 @@ RUNENV		=
 RUNTEST		= $(RUNENV)$(TESTPROG)
 CHOICEFLAGS	= 
 
+NETBRICOPOOL	= brico@dev.beingmeta.com
+FILEBRICOPOOL	= /data/brico/brico.pool
+ZFILEBRICOPOOL	= /data/bg/brico.pool
+NETBRICOINDEX	= brico@dev.beingmeta.com
+FILEBRICOINDEX	= /data/brico/brico.index
+ZFILEBRICOINDEX	= /data/bg/brico.index
+BRICOPOOL	= $(FILEBRICOPOOL)
+BRICOINDEX	= $(FILEBRICOINDEX)
+
 TESTBIN=makedtype printdtype copydtype testcapi \
         choicetest slotmaptest \
 	hashtabletest \
 	intersectiontest uniontest \
 	differencetest \
         maketable resizetable \
-	tablekeys readtable
+	tablekeys readtable \
+	pool-get dtcall indexop index-get dbtool
 SHAREDBIN=\
         makedtype.shared printdtype.shared copydtype.shared testcapi.shared \
         choicetest.shared slotmaptest.shared \
@@ -53,7 +64,32 @@ SHAREDBIN=\
 	intersectiontest.shared uniontest.shared \
 	differencetest.shared \
         maketable.shared resizetable.shared \
-	tablekeys.shared readtable.shared
+	tablekeys.shared readtable.shared \
+	pool-get.shared dtcall.shared indexop.shared \
+        index-get.shared dbtool.shared
+
+# Rules
+
+%.o: %.c
+	@$(CC) $(CFLAGS) -o $@ $<
+	@echo CC $@ $<
+
+# Note that we don't add @suffix@ to these executables because they're
+# never installed
+%: %.c ../../lib/libknodrivers@suffix@.a 	\
+	../../lib/libknostorage@suffix@.a 		\
+	../../lib/libknocore@suffix@.a
+	@echo MKTEST_STATIC $@
+	@$(CC) $(CFLAGS) $(EXEFLAGS) @STATICLDFLAGS@ $(LDFLAGS) $(EXELIBS) -o $@ $^ \
+		$(LIBS) $(EXELIBS)
+
+# This is for making shared (dynamically linked) versions of the test programs
+%.shared: %.c
+	@echo MKTEST_SHARED $@
+	@$(CC) $(CFLAGS) $(EXEFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS) $(EXELIBS) \
+		-lknocore@suffix@ -lknostorage@suffix@ -lknodrivers@suffix@ $(LIBS) $(EXELIBS)
+
+# Targets
 
 all: $(TESTBIN) $(SHAREDBIN)
 
@@ -63,7 +99,8 @@ memtests:
 heaptests:
 	make "RUNENV=HEAPCHECK=normal" mosttests
 alltests: dtypetests choicetests mergechoicetests \
-		tabletests slotmaptests slotmaptests2
+		tabletests slotmaptests slotmaptests2 \
+		allpooltests allindextests
 #		smallbricotests mediumbricotests bigbricotests
 mosttests: dtypetests choicetests tabletests slotmaptests slotmaptests2
 #		smallbricotests
@@ -269,28 +306,50 @@ bigbricotests: ../data/brico.dump
 	@echo "***" Trying to make the data for a pretty big hashtable
 	cd ../data; make BRICO=/data/brico/brico brico.dump
 
-%.o: %.c
-	@$(CC) $(CFLAGS) -o $@ -c $<
-	@echo CC $@ $<
+# Storage tests
+
+pooltests:
+	$(RUNTEST) ./pool-get $(BRICOPOOL) @1/13800
+	$(RUNTEST) ./pool-get $(BRICOPOOL) @1/13800 @1/13ad9 \
+			@1/1525d @1/1bbe8 @1/1bdff @1/1cb47
+	$(RUNTEST) ./pool-get $(BRICOPOOL) @/brico/13800 @/brico/13ad9 \
+			@/brico/1525d @/brico/1bbe8 @/brico/1bdff @/brico/1cb47
+
+filepooltests:
+	@echo "***" Running file pool tests
+	make BRICOPOOL=$(FILEBRICOPOOL) pooltests
+netpooltests:
+	@echo "***" Running netpool tests
+	make BRICOPOOL=$(NETBRICOPOOL) pooltests
+
+allpooltests: filepooltests netpooltests
+
+indextests:
+	$(RUNTEST) ./index-get $(BRICOINDEX) "(@1/2c1c7 . \"example\")"
+	$(RUNTEST) ./index-get $(BRICOINDEX) "(@1/2c1c7 . \"example\")" \
+		"(@1/2c1c7 . \"fish\")" "(@1/2c1c7 . \"dog\")"
+
+fileindextests:
+	@echo "***" Running file index tests
+	make BRICOINDEX=$(FILEBRICOINDEX) indextests
+netindextests:
+	@echo "***" Running netindex tests
+	make BRICOINDEX=$(NETBRICOINDEX) indextests
+
+allindextests: fileindextests netindextests
 
 # Note that we don't add @suffix@ to these executables because they're
 # never installed
-$(TESTBIN): ../../src/storage/streams.o ../../lib/libknocore@suffix@.a
-%: %.c
-	@echo MKTEST_STATIC $@
-	$(CC) $(CFLAGS) $(EXEFLAGS) @STATICLDFLAGS@ $(LDFLAGS) -o $@ $^ $(LIBS) $(EXELIBS)
-
-# This is for making shared (dynamically linked) versions of the test programs
-%.shared: %.c
-	@echo MKTEST_SHARED $@
-	@$(CC) $(CFLAGS) $(EXEFLAGS) $(LDFLAGS) -o $@ $^ \
-		../../src/storage/streams.o $(LIBS) -lknocore@suffix@ \
-		$(LIBS) $(EXELIBS)
+$(TESTBIN): ../../lib/libknodrivers@suffix@.a 	\
+	../../lib/libknostorage@suffix@.a 		\
+	../../lib/libknocore@suffix@.a
 
 ../../lib/libknocore@suffix@.a:
-	cd ../..; make lib/libknocore.a
-../../src/storage/streams.o:
-	cd ../..; make lib/libknostorage.a
+	cd ../..; make lib/libknocore@suffix@.a
+../../lib/libknostorage@suffix@.a:
+	cd ../..; make lib/libknostorage@suffix@.a
+../../lib/libknodrivers@suffix@.a:
+	cd ../..; make lib/libknodrivers@suffix@.a
 
 testclean:
 	@rm -f *.data *.dump *.table *.sorted
