@@ -1,1 +1,1 @@
-../dbg/.gdbinit
+dbg/.gdbinit
