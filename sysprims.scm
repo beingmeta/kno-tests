@@ -47,7 +47,8 @@
 
 (applytest string? gethostname)
 (applytest ip-addr? hostaddrs "beingmeta.com")
-(applytester {} hostaddrs "beingmeta.cox")
+;; This doesn't work if the DNS is configured to map invalid hostnames somewhere
+;;(applytester {} hostaddrs "beingmeta.cox")
 
 (applytester #t check-version 2001)
 (applytester #t check-version 2001 1 0)
