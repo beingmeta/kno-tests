@@ -1,2 +1,0 @@
-source @abs_top_srcdir@/etc/gdbinit
-directory @abs_top_srcdir@:@abs_top_srcdir@/../libu8:@extra_sources@
