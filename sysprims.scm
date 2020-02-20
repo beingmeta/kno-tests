@@ -63,7 +63,7 @@
 (applytester #t require-version 1910 0)
 
 (applytester #t check-version 2001)
-(errtest (require-version 2001 2 2))
+(errtest (require-version 2001 2 9))
 (errtest (require-version 2001 3))
 (errtest (require-version 2012))
 
