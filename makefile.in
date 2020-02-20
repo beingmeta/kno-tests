@@ -924,37 +924,11 @@ optscheme_leaktest:
 
 cmodules: core-cmodules text-cmodules db-cmodules graphics-cmodules archive-cmodules
 
-core-cmodules: @TEST_CORE_CMODULES@
-text-cmodules: @TEST_TEXT_CMODULES@
-db-cmodules: @TEST_DB_CMODULES@
-graphics-cmodules: @TEST_DB_CMODULES@
-archive-cmodules: @TEST_ARCHIVE_CMODULES@
-
-test-zeromq:
-	@${RUN} ${KNOX} zeromq.scm ${RUNCONF}
-	@${header} "■■■■ Completed ZeroMQ tests ${RUNCONF}"
-
-zeromq:
+cmodules: @TEST_CMODULES@
 
 sqlite:
-mongodb:
-mysql:
-odbc:
 
-leveldb:
-rocksdb:
-
-imagick:
-exif:
-qrcode:
-
-zlib:
-ziptools:
 libarchive:
-
-tidy:
-sundown:
-hyphenate:
 
 crypto cryptotest:
 	@${RUN} ${KNOX} crypto.scm ${RUNCONF}
