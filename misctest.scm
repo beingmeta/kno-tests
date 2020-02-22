@@ -271,7 +271,7 @@
 (errtest (string->lisp "#\"xyz\\x2g\""))
 (errtest (string->lisp "#\"ab\n\a\b\\\f\h\t\r\z\#\035\013\\xg2;\""))
 
-(evaltest dtype-test-obj (read-xtype (emit-xtype dtype-test-obj)))
+(evaltest dtype-test-obj (decode-xtype (encode-xtype dtype-test-obj)))
 
 ;;; These are various regression tests for some GC problems
 
