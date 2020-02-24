@@ -23,7 +23,7 @@
 (applytest #f dynamic-load "data/nomod")
 
 (applytest overlaps? 'show% get-exports 'stringfmts)
-(applytest {} get-exports 'zyizx)
+(errtest (get-exports 'zyizx))
 
 (applytest pair? config 'module)
 (applytest 'void config! 'module 'stringfmts)
