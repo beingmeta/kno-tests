@@ -20,7 +20,7 @@
 (config! 'log:threadid #t)
 (config! 'dload:trace #t)
 
-(define pooltype 'bigpool)
+(define pooltype 'knopool)
 (varconfig! pooltype pooltype #t)
 (define indextype 'hashindex)
 (varconfig! indextype indextype #t)
