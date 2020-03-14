@@ -119,7 +119,7 @@ cmdtests:
 	make execscripts chainscripts batchscripts chained_batchscripts utilscripts
 
 static-tests: schemetests optscheme loadmods optmods slotmaps tables pools indexes framedbs
-schemetest schemetests scheme: r4rs exceptions choices sequences breaks numbers regex \
+schemetest schemetests scheme: r4rs exceptions choices sequences breaks numbers regex xtypes \
         lambda conditionals iterators binders errfns requests compounds binio \
 	reflect hashsets eval loading modules quasiquote promises ffi configs opts appenv \
 	picktest cachecall texttools webtools timefns sysprims startup stringprims \
@@ -185,6 +185,9 @@ binio:
 eval:
 	@${RUN} ${KNOX} eval.scm ${RUNCONF}
 	@${header} "■■■■ Completed miscellaneous eval tests ${RUNCONF}"
+xtypes:
+	@${RUN} ${KNOX} xtypes.scm ${RUNCONF}
+	@${header} "■■■■ Completed xtypes tests ${RUNCONF}"
 quasiquote:
 	@${RUN} ${KNOX} quasiquote.scm ${RUNCONF}
 	@${header} "■■■■ Completed quasiquote tests ${RUNCONF}"
