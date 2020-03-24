@@ -330,9 +330,9 @@
 (evaltest #t (reflect/profile! arity-test))
 (applytest #t reflect/profiled? arity-test)
 (applytest #f reflect/profiled? car)
-(applytest #f reflect/profile! car #f)
 (errtest (reflect/profile! if))
-(errtest (reflect/profile! arity-test #f))
+(applytest #f reflect/profile! car #f)
+(evaltest #f (reflect/profile! arity-test #f))
 (evaltest #t (reflect/profile! arity-test #t))
 (applytest #f reflect/profiled? if)
 
