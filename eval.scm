@@ -792,8 +792,10 @@
 
 ;;; Comment objects
 
+#|
 (evaltest 9 (+ 2 3 #;"this is four" 4))
 (evaltest '(+ 2 3 #;"this is four" 4) '(+ 2 3 #;"this is four" 4))
+|#
 
 ;;; Loading stuff
 
