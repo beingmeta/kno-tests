@@ -50,6 +50,7 @@
 		  (display "SECTION") (write args) (newline)
 		  (set! cur-section args) #t))
 
+
 (SECTION 2 1);; test that all symbol characters are supported.
 '(+ - ... !.. $.+ %.- &.! *.: /:. :+. <-. =. >. ?. ~. _. ^.)
 
@@ -89,6 +90,7 @@
 		      disjoint-type-functions))
 	  (list #t #\a '() 9739 '(applytest) SECTION "test" 'car '#(a b c))
 	  (list #f #\newline '() -3252 '(t . t) car "" 'nil '#()))
+
 (SECTION 4 1 2)
 (applytester #t equal? '(quote a) (quote 'a))
 (applytester #t equal? '(quote a) ''a)
@@ -287,6 +289,7 @@
 (applytester #t boolean? #f)
 (applytester #f boolean? 0)
 (applytester #f boolean? '())
+
 (SECTION 6 2)
 (applytester #t eqv? 'a 'a)
 (applytester #f eqv? 'a 'b)
@@ -323,6 +326,7 @@
 (applytester #t equal? "abc" "abc")
 (applytester #t equal? 2 2)
 (applytester #t equal? (make-vector 5 'a) (make-vector 5 'a))
+
 (SECTION 6 3)
 (evaltester '(a b c d e) '(a . (b . (c . (d . (e . ())))))
 	    'dot)
@@ -662,6 +666,7 @@
   (applytest 4503599627370495 string->number "FFFFFFFFFFFFF" 16)
   (applytest -100000000000000010 'big-minus (- (- 100000000000000000) 10)))
 
+
 (SECTION 6 5 6)
 (applytester "0" number->string 0)
 (applytester "100" number->string 100)
@@ -800,7 +805,9 @@
 (applytester #\A char-upcase #\a)
 (applytester #\a char-downcase #\A)
 (applytester #\a char-downcase #\a)
+
 (SECTION 6 7)
+
 (applytester #t string? "The word \"recursion\\\" has many meanings.")
 (applytester #t string? "")
 ; (define f (make-string 3 #\*))
@@ -964,6 +971,7 @@
 (applytester 4 list-length '(1 2 3 4))
 (applytester #f list-length '(a b . c))
 (applytester '() map cadr '())
+
 
 ;;; This tests full conformance of call-with-current-continuation.  It
 ;;; is a separate test because some schemes do not support call/cc
@@ -1161,15 +1169,6 @@
 (define (fibi n)
   (if (= n 0) 0 (fib-iter n 1 0)))
 
-(define (test-tail-calls)
-  (applytest 0 balancer 100)
-  ;; This should blow out the stack if tail recursion is broken
-  (applytest 0 balancer 10000)
-  (applytest 6765 fibi 20)
-  (applytest 280571172992510140037611932413038677189525 fibi 200)
-  (applytest 43466557686937456435688527675040625802564660517371780402481729089536555417949051890403879840079255169295922593080322634775209689623239873322471161642996440906533187938298969649928516003704476137795166849228875
-	     fibi 1000))
-
 ;; This tests that tail calls in WHEN are evaluated
 
 (define test-flag #f)
@@ -1190,9 +1189,6 @@
 (test-call/cc)
 (test-bignums)
 (test-inexact)
-(test-tail-calls)
-
-(applytest #t optimized-tail-testfn)
 
 (test-finished "R4RS test")
 
