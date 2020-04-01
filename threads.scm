@@ -244,7 +244,7 @@
     (dotimes (i 16)
       (set+! watch-threads (thread/call fifo-watcher fifo seen)))
     (thread/wait! gen-threads)
-    (until (zero? (fifo/load fifo)) (fifo/wait! fifo))
+    (until (zero? (fifo/load fifo)) (fifo/wait fifo))
     (fifo/close! fifo)
     (thread/wait! watch-threads)
     (applytest #t identical? (hashset-elts generated) (hashset-elts seen))))
