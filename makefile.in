@@ -111,6 +111,9 @@ all_tests alltests: cleanlogs
 	make cmdtests
 	@${header} "■■■■■■■■ Done with alltests"
 
+smoke smoketest:
+	@${RUN} ${KNOX} smoke.scm ${RUNCONF}
+
 libtests: scheme optscheme slotmaps
 dbs: pools indexes
 cmdtests:
@@ -119,13 +122,13 @@ cmdtests:
 	make execscripts chainscripts batchscripts chained_batchscripts utilscripts
 
 static-tests: schemetests optscheme loadmods optmods slotmaps tables pools indexes framedbs
-schemetest schemetests scheme: r4rs exceptions choices sequences breaks numbers regex xtypes \
+schemetest schemetests: r4rs exceptions choices sequences breaks numbers regex xtypes \
         lambda conditionals iterators binders errfns requests compounds binio \
 	reflect hashsets eval loading modules quasiquote promises ffi configs opts appenv \
 	picktest cachecall texttools webtools timefns sysprims startup stringprims \
 	threads i18n misc gctests profiler sqlite \
 	fileprims xml
-optscheme: schemetest
+scheme optscheme: schemetests
 	@${header} "■■■■■■■■ Running optimized scheme tests ${RUNCONF}"
 	make RUNCONF="TESTOPTIMIZED=yes ${RUNCONF}" r4rs choices sequences misctest configs reflect \
 	  exceptions picktest cachecall timefns sysprims compounds i18n fileprims lambda \
