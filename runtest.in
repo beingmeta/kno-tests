@@ -46,8 +46,8 @@ fi;
 if [ ! -z "${DEBUGGING}" ]; then
     echo "Testing: @test_env@ ${PROGNAME} $* LOGTIME=${LOGTIME} > ${LOGFILE}";
 fi;
-echo "$$ @test_env@ ${PROGNAME} $* LOGTIME=${LOGTIME} > ${LOGFILE}" >> state/alltests.log
-echo "$$ @test_env@ ${PROGNAME} $* LOGTIME=${LOGTIME} > ${LOGFILE}" > state/$$.cmd
+echo "$$ @test_env@ ${TEST_HELPER} ${PROGNAME} $* LOGTIME=${LOGTIME} > ${LOGFILE}" >> state/alltests.log
+echo "$$ @test_env@ ${TEST_HELPER} ${PROGNAME} $* LOGTIME=${LOGTIME} > ${LOGFILE}" > state/$$.cmd
     
 if test ! -z ${PREAMBLE}; then
    echo "TEST: " ${PROGNAME} $*;
@@ -57,7 +57,7 @@ fi;
 . ./testenv.sh
 
 if [ "${LOGFILE}" != "none" ]; then
-    if @test_env@ ${PROGNAME} $* LOGTIME=${LOGTIME} > ${LOGFILE} 2>&1; then
+    if @test_env@ ${TEST_HELPER} ${PROGNAME} $* LOGTIME=${LOGTIME} > ${LOGFILE} 2>&1; then
 	MSG=${SUCCESS_MSG}
 	SUCCESS=${SUCCESS_VAL}
     else
