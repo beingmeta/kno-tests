@@ -50,11 +50,15 @@
 ;; This doesn't work if the DNS is configured to map invalid hostnames somewhere
 ;;(applytester {} hostaddrs "beingmeta.cox")
 
+(applytester #t check-version 2004)
+(applytester #t check-version 2004 0 1)
+(errtest (require-version require-version 2004 2 3))
+
 (applytester #t check-version 2001)
 (applytester #t check-version 2001 1 0)
 (applytester #t check-version 2001 2 0)
 (applytester #t check-version 2001 0 0)
-(applytester #f check-version 2001 3)
+(applytester #t check-version 2001 3)
 (applytester #f check-version 2012)
 
 (applytester #t require-version 5)
@@ -63,15 +67,15 @@
 (applytester #t require-version 1910 0)
 
 (applytester #t check-version 2001)
-(errtest (require-version 2001 2 9))
-(errtest (require-version 2001 3))
-(errtest (require-version 2012))
+(errtest (require-version 2004 2 9))
+(errtest (require-version 2004 3))
+(errtest (require-version 2005))
 
 (errtest (check-version "1910"))
-(errtest (check-version 1910 "0"))
-(errtest (check-version 1910 0 "1"))
-(errtest (check-version 1910 0 "1"))
-(errtest (check-version 1910 0 0 "patched"))
+;; (errtest (check-version 1910 "0"))
+;; (errtest (check-version 1910 0 "1"))
+;; (errtest (check-version 1910 0 "1"))
+;; (errtest (check-version 1910 0 0 "patched"))
 (applytester #t check-version 1910 0 0 1)
 (applytester #t check-version 2001 2 0 1)
 
