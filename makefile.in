@@ -223,7 +223,6 @@ opts:
 modules:
 	@${RUN} ${KNOX} modules.scm ${RUNCONF}
 	@${RUN} ${KNOX} modules.scm LOAD:TRACE=yes ${RUNCONF}
-	@${RUN} ${KNOX} r4rs.scm LOCKEXPORTS=yes LOCKMODULES=yes ${RUNCONF}
 	@${header} "■■■■ Completed module tests ${RUNCONF}"
 compounds:
 	@${RUN} ${KNOX} compounds.scm ${RUNCONF}
@@ -406,63 +405,18 @@ pooltests pools: filepooltest bigpooltests flexpooltests
 
 indextest:
 	@${header} "■■■■■■■■ Running index tests ${TESTBASE} ${RUNCONF}"
-	@rm -rf *.edit.dtype ${TESTBASE}
-	@${header} Build with the offsets cache off
-	@${RUN} ${KNOX} tabletest.scm ${TESTBASE} ${TESTSIZE} ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} ${RUNCONF}             && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} CACHELEVEL=2  ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} CACHELEVEL=3  ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} CONSINDEX=yes  ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} ${RUNCONF} CACHELEVEL=2 CONSINDEX=yes && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} +${TESTBASE}.edit.dtype ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} ?${TESTBASE}.edit.dtype ${RUNCONF}
+	@${RUN} ${KNOX} tabletest.scm ${TESTBASE} ${TESTSIZE} ${RUNCONF} RESET=yes && \
+	 ${RUN} ${KNOX} tabletest.scm ${TESTBASE} ${RUNCONF}             && \
+	 ${RUN} ${KNOX} tabletest.scm ${TESTBASE} CACHELEVEL=2  ${RUNCONF} && \
+#	 ${RUN} ${KNOX} tabletest.scm ${TESTBASE} CACHELEVEL=3  ${RUNCONF} && \
+	 ${RUN} ${KNOX} tabletest.scm ${TESTBASE} CONSINDEX=yes  ${RUNCONF} && \
+	 ${RUN} ${KNOX} tabletest.scm ${TESTBASE} CACHELEVEL=2 CONSINDEX=yes ${RUNCONF} && \
+	 ${RUN} ${KNOX} tabletest.scm ${TESTBASE} +${TESTBASE}.edit.dtype ${RUNCONF} && \
+	 ${RUN} ${KNOX} tabletest.scm ${TESTBASE} ?${TESTBASE}.edit.dtype ${RUNCONF}
 	@${header} "■■■■■■■■ Finished index tests ${TESTBASE} ${RUNCONF}"
 
-fileindextest:
-	@${header} "■■■■■■■■ Running file index tests ${TESTBASE} ${RUNCONF}"
-	@rm -rf *.edit.dtype ${TESTBASE}
-	@${header} Build with the offsets cache off
-	@${RUN} ${KNOX} tabletest.scm ${TESTBASE} ${TESTSIZE} ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} ${RUNCONF}             && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} CACHELEVEL=2  ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} CACHELEVEL=3  ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} CONSINDEX=yes  ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} ${RUNCONF} CACHELEVEL=2 CONSINDEX=yes && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} +${TESTBASE}.edit.dtype ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} ?${TESTBASE}.edit.dtype ${RUNCONF} && \
-	rm ${TESTBASE}
-	@${header} Build with the offsets cache on
-	@${RUN} ${KNOX} tabletest.scm ${TESTBASE} ${TESTSIZE} CACHELEVEL=2 ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} CACHELEVEL=2 ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} +${TESTBASE}.edit.dtype ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} ?${TESTBASE}.edit.dtype ${RUNCONF} && \
-	rm ${TESTBASE}
-	@${header} Build and edit with the offsets cache on
-	@${RUN} ${KNOX} tabletest.scm ${TESTBASE} ${TESTSIZE} CACHELEVEL=2 ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} CACHELEVEL=2 ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} +${TESTBASE}.edit.dtype ${RUNCONF} CACHELEVEL=2 && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} ?${TESTBASE}.edit.dtype ${RUNCONF} CACHELEVEL=2 && \
-	rm ${TESTBASE}
-	@${header} Build and edit with the offsets cache and memorymapping on
-	@${RUN} ${KNOX} tabletest.scm ${TESTBASE} ${TESTSIZE} CACHELEVEL=3 ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} CACHELEVEL=3 ${RUNCONF} && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} +${TESTBASE}.edit.dtype ${RUNCONF} CACHELEVEL=3 && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} ?${TESTBASE}.edit.dtype ${RUNCONF} CACHELEVEL=3 && \
-	rm ${TESTBASE}
-	@${header} Build with both cache and consindices
-	@${RUN} ${KNOX} tabletest.scm ${TESTBASE} ${TESTSIZE} \
-		${RUNCONF} CACHELEVEL=2 CONSINDEX=yes && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} \
-		${RUNCONF} CACHELEVEL=2 CONSINDEX=yes && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} +${TESTBASE}.edit.dtype \
-		${RUNCONF} CACHELEVEL=2 CONSINDEX=yes && \
-	${RUN} ${KNOX} tabletest.scm ${TESTBASE} ?${TESTBASE}.edit.dtype \
-		${RUNCONF} && \
-	rm -rf ${TESTBASE} *.edit.dtype
-	@${header} "■■■■■■■■ Finished file index tests ${TESTBASE} ${RUNCONF}"
-
 fileindexes fileindex:
-	@make TESTBASE=tmpfile.index RUNCONF="INDEXTYPE=fileindex" fileindextest
+	@make TESTBASE=tmpfile.index RUNCONF="INDEXTYPE=fileindex" indextest
 
 memindexes memindex:
 	@make TESTBASE=memfile.index RUNCONF="INDEXTYPE=memindex" indextest
@@ -504,7 +458,7 @@ knoindexes knoindex: knoindex32 knoindex40 knoindex40x knoindex64
 
 indextests indexes: fileindexes hashindexes memindexes knoindexes
 
-.PHONY: indexes indextests fileindexes hashindexes memindexes aggindexes
+.PHONY: indexes indextests fileindexes hashindexes memindexes aggindexes knoindexes
 
 # Database/frames test
 
