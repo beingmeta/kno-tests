@@ -114,7 +114,7 @@ all_tests alltests: cleanlogs
 smoke smoketest:
 	@${RUN} ${KNOX} smoke.scm ${RUNCONF}
 
-libtests: scheme optscheme slotmaps
+libtests: scheme optscheme threads slotmaps
 dbs: pools indexes
 cmdtests:
 	@echo "# ■■■■■■■■ Running command line tests ${RUNCONF}"
@@ -126,13 +126,13 @@ schemetest schemetests: r4rs exceptions choices sequences breaks numbers regex x
         lambda conditionals iterators binders errfns requests compounds binio \
 	reflect hashsets eval loading modules quasiquote promises ffi configs opts appenv \
 	picktest cachecall texttools webtools timefns sysprims startup stringprims \
-	threads i18n misc gctests profiler sqlite \
+	i18n misc gctests profiler sqlite tail \
 	fileprims xml
 scheme optscheme: schemetests
 	@${header} "■■■■■■■■ Running optimized scheme tests ${RUNCONF}"
 	make RUNCONF="TESTOPTIMIZED=yes ${RUNCONF}" r4rs choices sequences misctest configs reflect \
 	  exceptions picktest cachecall timefns sysprims compounds i18n fileprims lambda \
-	  numbers regex threads xml texttools eval binders conditionals errfns \
+	  numbers regex xml texttools eval binders conditionals errfns \
           requests sysprims timefns breaks eval gctests
 	@${header} "■■■■■■■■ Completed optimized scheme tests ${RUNCONF}"
 
@@ -152,6 +152,9 @@ optmods optimize_modules: load_modules
 r4rs:
 	@${RUN} ${KNOX} r4rs.scm ${RUNCONF}
 	@${header} "■■■■ Completed r4rs tests ${RUNCONF}"
+tail:
+	@${RUN} ${KNOX} tail.scm ${RUNCONF}
+	@${header} "■■■■ Completed tail call tests ${RUNCONF}"
 exceptions:
 	@${RUN} ${KNOX} exceptions.scm ${RUNCONF}
 	@${header} "■■■■ Completed exceptions tests ${RUNCONF}"

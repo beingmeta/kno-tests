@@ -39,9 +39,53 @@
   (bug-test #t)
   test-flag)
 
-(test-tail-calls)
+(define (countup n (i 0))
+  (if (= n 0) (dbg i) (countup (-1+ n) (1+ i))))
 
-(applytest #t optimized-tail-testfn)
+(define (countup n (i 0))
+  (if (= n 0) (dbg i) (countup (-1+ n) (1+ i))))
+
+(define (reduce-string string)
+  (if (= (length string) 0) 
+      (dbg string)
+      (reduce-string (slice string 1))))
+
+(define (smerge s1 s2)
+  (if (zero? (length s1)) s2
+      (smerge (slice s1 1) (glom (slice s1 0 1) s2))))
+
+(define (domerge l1 l2)
+  (if (null? l1) l2
+      (domerge (cdr l1) (cons (car l1) l2))))
+
+(define (domerge-bug1 l1 l2)
+  (smerge "ab" "c")
+  (if (null? l1) l2
+      (domerge-bug1 (cdr l1) (cons (car l1) l2))))
+
+(define (domerge-bug2 l1 l2)
+  (if (and (null? l1) (smerge "ab" "c"))
+      l2
+      (domerge-bug2 (cdr l1) (cons (car l1) l2))))
+
+(define (domerge-bug3 l1 l2)
+  (if (begin (smerge "ab" "c") (null? l1))
+      l2
+      (domerge-bug3 (cdr l1) (cons (car l1) l2))))
+
+(define (main)
+  (dbg main)
+  (%watch (smerge "ab" "c"))
+  (applytest "bac" (smerge "ab" "c"))
+  (applytest '(b a c) (domerge '(a b) '(c)))
+  (countup 10000)
+  (reduce-string "abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789")
+  (domerge-bug1 '(a b) '(c))
+  (domerge-bug2 '(a b) '(c))
+  (domerge-bug3 '(a b) '(c))
+  (test-tail-calls)
+  (applytest #t optimized-tail-testfn))
+
 
 (test-finished "R4RS test")
 
