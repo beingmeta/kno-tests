@@ -10,3 +10,8 @@
   (applytest 42 p twelve thirteen)
   (evaltest 42 (p twelve thirteen)))
 
+(applytest "foobar" glom "foo" "bar")
+
+(define (g x y) (glom x y))
+(applytest "foobar" g "foo" "bar")
+
