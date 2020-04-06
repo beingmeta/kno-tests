@@ -82,8 +82,9 @@
 ;;;; Pointer locks, etc
 
 (define ptrlock-vec #("foo" "bar" "baz"))
-(define ptrlock-string #("foo" "bar" "baz"))
+(define ptrlock-string "elephantine")
 (applytest #t = (ptrlock ptrlock-vec) (ptrlock ptrlock-vec))
+(applytest #t = (ptrlock ptrlock-string) (ptrlock ptrlock-string))
 (applytest #t > (+ (if (= (ptrlock "foo") (ptrlock "foo")) 0 1)
 		   (if (= (ptrlock "telephone") (ptrlock "telephone")) 0 1)
 		   (if (= (ptrlock #"packet") (ptrlock #"packet")) 0 1))
@@ -92,10 +93,6 @@
 		   (if (= (ptrlock "telephone" 811) (ptrlock "telephone" 811)) 0 1)
 		   (if (= (ptrlock #"packet" 811) (ptrlock #"packet" 811)) 0 1))
 	   0)
-(applytest 0 + 
-	   (if (= (ptrlock "foo" 777) (ptrlock "foo" 811)) 1 0)
-	   (if (= (ptrlock "telephone" 777) (ptrlock "telephone" 811)) 1 0)
-	   (if (= (ptrlock #"packet" 777) (ptrlock #"packet" 811)) 1 0))
 
 ;;; Config stuff
 
