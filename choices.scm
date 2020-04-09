@@ -246,7 +246,8 @@
   (cons (qc x) (qc y)))
 (evaltester '(3 . 4) (makepair 3 4))
 (evaltester '{} (makepair 3 {}))
-(evaltester '(3 . {}) (makepair 3 '#{}))
+(unless (config 'testoptimized)
+  (evaltester '(3 . {}) (makepair 3 '#{})))
 
 ;;; Set operations
 
