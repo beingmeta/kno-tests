@@ -45,4 +45,8 @@
 (evaltest 'err (case))
 (evaltest 'err (case 33 ()))
 
+(define obj #[x 3.5 y "foo"])
 
+(evaltest 'y (let ((v 'y)) (unless (get obj 'q) (set! v 'z)) v))
+(evaltest 'z (let ((v 'y)) (when (get obj 'x) (set! v 'z)) v))
+(evaltest 'y (let ((v 'y)) (when (get obj 'q) (set! v 'z)) v))
