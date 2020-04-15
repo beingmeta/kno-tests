@@ -360,3 +360,12 @@
 (applytest 'err gcd 200.0 10)
 (applytest 'err lcm 200 10.0)
 (applytest 'err lcm 200.0 10)
+
+;;; Check arithmetic operators
+
+(define-tester (p x y z) (+ x y z))
+(define-tester (s x y z) (- x y z))
+(define-tester (m x y z) (* x y z))
+
+(applytest 10 p 5 2 3)
+(applytest 0 s 5 4 1)
