@@ -21,6 +21,25 @@
 (when private-dtype-file
   (applytest #f file-readable? private-dtype-file))
 
+(define (read-till-end file (marker #default))
+  (let* ((in (open-input-file file))
+	 (line (getline in marker)))
+    (while (string? line) (set! line (getline in #default #default marker)))
+    line))
+
+(applytest #f string? (read-till-end (mkpath data-dir "testobj.text")))
+(applytest eof? read-till-end (mkpath data-dir "testobj.text"))
+
+(define (read-till-end+ file (marker #default))
+  (let* ((in (open-input-file file))
+	 (line (getline in #default #default marker)))
+    (while (string? line) (set! line (getline in #default #default marker)))
+    line))
+
+(%watch (applytest #f string? (read-till-end+ (mkpath data-dir "testobj.text"))))
+(applytest eof? read-till-end+ (mkpath data-dir "testobj.text"))
+(applytest 'foo read-till-end+ (mkpath data-dir "testobj.text") 'foo)
+
 (applytest "(#[foo 3 bar 8] " getline
 	   (open-input-file (mkpath data-dir "testobj.text")))
 (define inport (open-input-file (mkpath data-dir "testobj.text")))
