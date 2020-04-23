@@ -36,7 +36,7 @@
     (while (string? line) (set! line (getline in #default #default marker)))
     line))
 
-(%watch (applytest #f string? (read-till-end+ (mkpath data-dir "testobj.text"))))
+(applytest #f string? (read-till-end+ (mkpath data-dir "testobj.text")))
 (applytest eof? read-till-end+ (mkpath data-dir "testobj.text"))
 (applytest 'foo read-till-end+ (mkpath data-dir "testobj.text") 'foo)
 
