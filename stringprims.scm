@@ -1,4 +1,4 @@
-;;; -*- Mode: Scheme; text-encoding: latin-1 -*-
+;;; -*- Mode: Scheme; text-encoding: utf-8 -*-
 
 (load-component "common.scm")
 
@@ -32,6 +32,7 @@
 (applytest #t lowercase? "foo bar")
 (applytest #t capitalized? "Foo bar")
 
+(applytest 3 rposition #\- "3–8-s")
 (applytest #t empty-string? "")
 (applytest #t empty-string? " ")
 (applytest #t empty-string? " \t ")
