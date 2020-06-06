@@ -36,6 +36,23 @@
 
 (applytest packet? dtype->packet (lambda (x) (1+ x)))
 
+;;; Defaults
+
+(define bar-string "bar")
+(define-tester (add-bar string (suffix bar-string))
+  (glom string suffix))
+(applytester "foobar" add-bar "foo")
+(applytester "foobar" add-bar "foo" "bar")
+(applytester "foobar" add-bar "foo" #default)
+(applytester "foobaz" add-bar "foo" "baz")
+(applytester "foobar" add-bar "foo" #default)
+
+(define-tester (bad-bar string (suffix no-bar-string))
+  (glom string suffix))
+(applytester "foobar" bad-bar "foo" "bar")
+(applytester 'err bad-bar "foo")
+(applytester 'err bad-bar "foo" #default)
+
 ;;; Arity checking
 
 (define (doctest-1 x y)
