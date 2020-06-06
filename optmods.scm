@@ -20,6 +20,7 @@
 
 ;;(optimize-module! 'optimize)
 
+(load-component "libscm.scm")
 (load-component "stdlib.scm")
 
 (when trouble (exit 1))

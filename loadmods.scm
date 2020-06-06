@@ -12,6 +12,7 @@
 	 (use-module ,(cadr expr))
 	 (lambda (ex) (set! trouble ex) (reraise ex)))))
 
+(load-component "libscm.scm")
 (load-component "stdlib.scm")
 
 (when trouble (exit 1))
