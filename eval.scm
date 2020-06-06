@@ -4,6 +4,8 @@
 
 (use-module '{ezrecords reflection stringfmts})
 
+(define have-defmacro (get-module 'defmacro))
+
 (define textmatch (get (get-module 'texttools) 'textmatch))
 
 (define-tester (test-lexrefs (v 'foo))
@@ -309,7 +311,7 @@
 (evaltest #f (immediate? 333))
 (evaltest #t (immediate? #f))
 (evaltest #t (immediate? 'foo))
-(evaltest #t (immediate? #eof))
+;;(evaltest #t (immediate? #eof))
 
 (applytester #t applicable? car)
 (applytester #t applicable? broken)
@@ -670,6 +672,7 @@
 
 ;;; Lambda stuff
 
+
 (define test-nlambda
   (nlambda 'test (x y) (+ x y)))
 (applytester #t applicable? test-nlambda)
@@ -794,10 +797,26 @@
   (errtest (with-bindings #f (* x a)))
   (errtest (with-bindings "err" (* x a)))
   
-  (evaltest 33 (with-bindings (frame-create 'a 11) (* x a)))
-  (evaltest 88 (with-bindings (frame-create 'a 11 'x 8) (* x a)))
-  (errtest (with-bindings (frame-create 'b 11) (* x a))))
+  (evaltest 33 (with-bindings (frame-create #f 'a 11) (* x a)))
+  (evaltest 88 (with-bindings (frame-create #f 'a 11 'x 8) (* x a)))
+  (errtest (with-bindings (frame-create #f 'b 11) (* x a))))
 
+;;; DEFMACRO simple tests
+
+(lineout "Reached defmacro tests")
+
+(when have-defmacro
+  (lineout "Running defmacro tests")
+  (use-module 'defmacro)
+  (defmacro (square x) `(* ,x ,x))
+  (evaltest 9 (square 3))
+  (let ((callcount 0))
+    (evaltest 9 (square (begin (set! callcount (1+ callcount)) 3)))
+    (evaltest 2 callcount)
+    callcount)
+  (define (pyth a b) (sqrt (+ (square a) (square b))))
+  (applytest 5.0 pyth 3 4)
+  (lineout "Finished defmacro tests"))
 
 ;;; Some more eval stuff
 
