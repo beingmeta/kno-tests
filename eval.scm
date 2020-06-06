@@ -785,6 +785,20 @@
 (errtest (withenv foo (+ 3 9)))
 (errtest (withenv "bar" (+ 3 9)))
 
+;;; with-bindings tests
+
+(define x 3)
+(when (bound? with-bindings)
+  (evaltest 33 (with-bindings [a 11] (* x a)))
+  (evaltest 88 (with-bindings [a 11 x 8] (* x a)))
+  (errtest (with-bindings #f (* x a)))
+  (errtest (with-bindings "err" (* x a)))
+  
+  (evaltest 33 (with-bindings (frame-create 'a 11) (* x a)))
+  (evaltest 88 (with-bindings (frame-create 'a 11 'x 8) (* x a)))
+  (errtest (with-bindings (frame-create 'b 11) (* x a))))
+
+
 ;;; Some more eval stuff
 
 ;; Should hit eval.h fast_eval
