@@ -101,6 +101,12 @@
 	  `(defambda ,@(cdr expr)))))
   (define test-optimize! optimize!))
 
+(defambda (reftest obj thunk (optimize #f))
+  (when optimize (optimize! thunk))
+  (let ((count (refcount obj)))
+    (thunk)
+    (applytest count refcount obj)))
+
 (unless (config 'testoptimized #f)
   (define applytester applytest)
   (define evaltester evaltest)

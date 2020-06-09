@@ -126,14 +126,14 @@ schemetest schemetests: r4rs exceptions choices sequences breaks numbers regex x
         lambda conditionals iterators binders errfns requests compounds binio \
 	reflect hashsets eval loading modules quasiquote promises ffi configs opts appenv \
 	picktest cachecall texttools webtools timefns sysprims startup stringprims \
-	i18n misc gctests profiler sqlite tail \
+	i18n misc gctests gcoverflow profiler sqlite tail \
 	fileprims xml
 scheme optscheme: schemetests
 	@${header} "■■■■■■■■ Running optimized scheme tests ${RUNCONF}"
 	make RUNCONF="TESTOPTIMIZED=yes ${RUNCONF}" r4rs choices sequences misctest configs reflect \
 	  exceptions picktest cachecall timefns sysprims compounds i18n fileprims lambda \
 	  numbers regex xml texttools eval binders conditionals errfns \
-          requests sysprims timefns breaks eval gctests
+          requests sysprims timefns breaks eval gctests gcoverflow
 	@${header} "■■■■■■■■ Completed optimized scheme tests ${RUNCONF}"
 
 loadmods load_modules:
@@ -292,6 +292,9 @@ misc misctest:
 gctests:
 	@${RUN} ${KNOX} gctests.scm ${RUNCONF}
 	@${header} "■■■■ Completed GC tests ${RUNCONF}"
+gcoverflow:
+	@${RUN} ${KNOX} gcoverflow.scm ${RUNCONF}
+	@${header} "■■■■ Completed GC overflow tests ${RUNCONF}"
 profiling profiler:
 	@${RUN} ${KNOX} profiler.scm ${RUNCONF}
 	@${header} "■■■■ Completed GC tests ${RUNCONF}"
