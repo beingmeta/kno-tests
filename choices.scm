@@ -771,6 +771,14 @@
 	    (until (and (pair? scan) (get (car scan) 'q)) (set! scan (cdr scan)))
 	    scan))
 
+;;; This can sometimes leak when optimized
+
+(define (test-x x) (has-suffix x {"X" "x"}))
+(optimize! test-x)
+(applytest #f test-x "foo")
+(applytest #t test-x "arx")
+(applytest #f test-x "bar")
+
 ;;; Bigger sets
 
 (define big-choice-size 20000)
