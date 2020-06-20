@@ -21,17 +21,18 @@
   (applytest #t eq? 
 	     (cachecall cache identity "foo")
 	     (cachecall cache identity "foo"))
-  (applytest #t eq? 
-	     (cachecall cache glom "foo" "bar")
-	     (cachecall cache glom "foo" "bar"))
+  ;; (applytest #t eq? 
+  ;; 	     (cachecall cache glom "foo" "bar")
+  ;; 	     (cachecall cache glom "foo" "bar"))
   (applytest "foo" cachecall/probe cache identity "foo")
-  (applytest #t cachedcall? cache glom "foo" "bar")
-  (applytest #f cachedcall? cache glom "quux" "bar")
+  ;; (applytest #t cachedcall? cache glom "foo" "bar")
+  ;; (applytest #f cachedcall? cache glom "quux" "bar")
   (applytest #f cachedcall? cache + "quux" "bar")
   (applytest #t cachedcall? cache identity "foo")
   (applytest #f cachedcall? cache identity "bar")
   (applytest {} cachecall/probe cache identity "bar")
-  (applytest {} cachecall/probe cache glom "quux" "baz"))
+  ;; (applytest {} cachecall/probe cache glom "quux" "baz")
+  )
 
 (test-cache (make-hashtable))
 (begin
