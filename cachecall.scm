@@ -16,19 +16,39 @@
 (applytest #t eq? (cachecall identity "foo") (cachecall identity "foo"))
 
 (define explicit-cache (make-hashtable))
-(applytest #t eq? 
-	   (cachecall explicit-cache identity "foo")
-	   (cachecall explicit-cache identity "foo"))
+
+(define-tester (test-cache cache)
+  (applytest #t eq? 
+	     (cachecall cache identity "foo")
+	     (cachecall cache identity "foo"))
+  (applytest #t eq? 
+	     (cachecall cache glom "foo" "bar")
+	     (cachecall cache glom "foo" "bar"))
+  (applytest "foo" cachecall/probe cache identity "foo")
+  (applytest #t cachedcall? cache glom "foo" "bar")
+  (applytest #f cachedcall? cache glom "quux" "bar")
+  (applytest #f cachedcall? cache + "quux" "bar")
+  (applytest #t cachedcall? cache identity "foo")
+  (applytest #f cachedcall? cache identity "bar")
+  (applytest {} cachecall/probe cache identity "bar")
+  (applytest {} cachecall/probe cache glom "quux" "baz"))
+
+(test-cache (make-hashtable))
+(begin
+  (when (file-exists? "callcache.index") (remove-file "callcache.index"))
+  ;; This core test was moved from misctest.scm, but call caches need
+  ;; to be generalized
+  (let ((index (make-index "callcache.index" #[type fileindex slots 1000])))
+    ;; (test-cache index)
+    ;; (commit index)
+    ;; (swapout index)
+    ;; (applytest cachedcall? index glom "foo" "bar")
+    (remove-file "callcache.index")))
 
 (applytest #t cachedcall? identity "foo")
-(applytest #t cachedcall? explicit-cache identity "foo")
-
 (applytest #f cachedcall? identity "bar")
-(applytest #f cachedcall? explicit-cache identity "bar")
-
 (applytest "foo" cachecall/probe identity "foo")
 (applytest {} cachecall/probe identity "bar")
-(applytest {} cachecall/probe explicit-cache identity "bar")
 
 (clear-callcache!)
 (applytest #f cachedcall? identity "foo")

@@ -131,9 +131,6 @@
 ;;	   '(with-time-limit 1 (dotimes (i 1000000000)) #f)
 ;;	   #f))
 
-(define memoization-index
-  (make-index "memoization.index" #[type fileindex slots 1000]))
-
 (applytest #t real? 0.1)
 (applytest #t real? .1)
 (applytest #t number? 0.1)
