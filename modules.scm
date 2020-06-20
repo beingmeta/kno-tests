@@ -162,3 +162,25 @@
 
 (unless (or (config 'offline) (getenv "OFFLINE")) (test-webmods))
 
+;;;; make-env testing
+
+(define temp-mod (make-env #f #f 'double))
+(eval '(define (double x) (+ x x)) temp-mod)
+(use-module temp-mod)
+(evaltest #t (bound? double))
+(evaltest 8 (eval '(double 4) temp-mod))
+
+(define temp-mod (make-env 'scheme #f 'double))
+(eval '(define (double x) (+ x x)) temp-mod)
+(use-module temp-mod)
+(evaltest #t (bound? double))
+(evaltest 8 (eval '(double 4) temp-mod))
+
+(define temp-mod (make-env 'scheme [double (lambda (x) (+ x x))] 'double))
+(eval '(define (double x) (+ x x)) temp-mod)
+(use-module temp-mod)
+(evaltest #t (bound? double))
+(evaltest 8 (eval '(double 4) temp-mod))
+(applytest hashtable? module-exports-table temp-mod)
+
+(test-finished "Modules test")
