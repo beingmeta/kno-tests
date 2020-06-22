@@ -232,20 +232,20 @@
 (evaltest #t (pair? (macroexpand defrecord '(defrecord foo x y))))
 (errtest (pair? (macroexpand car '(defrecord foo x y))))
 
-(applytester ambiguous? module-bindings (get-module 'regex))
+(applytester ambiguous? module-binds (get-module 'regex))
 (applytester string? module-source (get-module 'regex))
-(applytester hashtable? module-exports-table (get-module 'regex))
-(applytester #f module-environment (get-module 'regex))
-(errtest (module-bindings "foo"))
-(errtest (module-exports-table "foo"))
+(applytester hashtable? module-exports (get-module 'regex))
+(applytester #f module-bindings (get-module 'regex))
+(errtest (module-binds "foo"))
+(errtest (module-exports "foo"))
 (errtest (wherefrom "foo"))
-(errtest (module-exports-table))
+(errtest (module-exports))
 (errtest (wherefrom))
 
 (applytester string? module-source (get-module 'bench/miscfns))
-(applytester hashtable? module-exports-table (get-module 'bench/miscfns))
-(applytester ambiguous? module-bindings (get-module 'bench/miscfns))
-(applytester hashtable? module-environment (get-module 'bench/miscfns))
+(applytester hashtable? module-exports (get-module 'bench/miscfns))
+(applytester ambiguous? module-binds (get-module 'bench/miscfns))
+(applytester hashtable? module-bindings (get-module 'bench/miscfns))
 (errtest (module-source "foo"))
 
 (applytest #t ambiguous? (getmodules (%env)))
@@ -258,12 +258,12 @@
 
 (applytester ambiguous? apropos "get")
 
-(applytester ambiguous? module-exports 'bench/miscfns)
-(applytester ambiguous? module-exports (get-module 'bench/miscfns))
-(applytester ambiguous? module-exports (get-module 'reflection))
-(errtest (module-exports #f))
-(applytester '{x y} module-exports #[x 3 y 4])
-(errtest (module-exports "bench/miscfns"))
+(applytester ambiguous? module-exported 'bench/miscfns)
+(applytester ambiguous? module-exported (get-module 'bench/miscfns))
+(applytester ambiguous? module-exported (get-module 'reflection))
+(errtest (module-exported #f))
+(applytester '{x y} module-exported #[x 3 y 4])
+(errtest (module-exported "bench/miscfns"))
 
 (evaltest #t (ambiguous? (getmodules)))
 
