@@ -48,14 +48,16 @@
 (begin (load-latest loadok-file)
   (applytester 4 get-load-ok-count))
 
+(dbg load-updates)
+
 (begin
   (set-file-modtime! loadok-file (timestamp+ (file-modtime loadok-file) 2))
-  (load-latest loadok-file)
+  (load-updates loadok-file)
   (applytester 5 get-load-ok-count))
 
 (begin
   (set-file-modtime! loadok-file (timestamp+ (file-modtime loadok-file) 2))
-  (load-latest)
+  (load-updates)
   (applytester 6 get-load-ok-count))
 
 (evaltest 1
