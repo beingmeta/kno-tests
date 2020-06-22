@@ -39,7 +39,7 @@
   (when (file-exists? "callcache.index") (remove-file "callcache.index"))
   ;; This core test was moved from misctest.scm, but call caches need
   ;; to be generalized
-  (let ((index (make-index "callcache.index" #[type fileindex slots 1000])))
+  (let ((index (make-index "callcache.index" #[type fileindex slots 1000 create #t])))
     ;; (test-cache index)
     ;; (commit index)
     ;; (swapout index)
