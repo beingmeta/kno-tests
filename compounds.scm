@@ -194,3 +194,9 @@
 (applytester slotmap? type-handlers type4.1)
 
 (type-set! 'type4 'someprop "someval")
+
+;;; XTYPEs
+
+(define test-obj
+  (make-xcompound 'type11 #f #f #t 2 3 4 "foo" '(bar)))
+(applytest test-obj decode-xtype (encode-xtype test-obj))
