@@ -77,6 +77,7 @@ OFFB40		= OFFTYPE=B40
 OFFB64		= OFFTYPE=B64
 OFFB32		= OFFTYPE=B32
 PACKINDEX	= ../src/scripts/pack-index.scm
+SPLITINDEX	= ../src/scripts/split-index.scm
 
 # Base targets
 
@@ -710,18 +711,18 @@ atexit_kill: atexit_normal
 
 # Builtin script tests
 
-utilscripts: repack-index split-index
+utilscripts: pack-index split-index
 
-repack-index:
+pack-index:
 	@${header} "■■■■■■■■ Testing repack index"
 	@rm -f packed.index
-	@${RUN} ${KNOX} ${PACKINDEX} data/misc.index packed.index ${RUNCONF} TESTLOAD=common.scm;
+	@${RUN} ${KNOX} ${PACKINDEX} data/misc.index packed.index ${RUNCONF} OVERWRITE=yes TESTLOAD=common.scm;
 	@${RUN} ${KNOX} indexcompare.scm data/misc.index packed.index ${RUNCONF} TESTLOAD=common.scm;
 
 split-index:
 	@${header} "■■■■■■■■ Testing split index"
 	@rm -f unique.index split.index
-	@${RUN} ${KNOX} ${PACKINDEX} data/misc.index split.index UNIQUE=unique.index TESTLOAD=common.scm ${RUNCONF};
+	@${RUN} ${KNOX} ${SPLITINDEX} data/misc.index split.index UNIQUE=unique.index OVERWRITE=yes TESTLOAD=common.scm ${RUNCONF};
 
 .PHONY: chained_batchscripts batchscripts chainscripts execscripts atexit
 
