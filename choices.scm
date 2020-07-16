@@ -4,6 +4,27 @@
 
 (optimization-leaks)
 
+(define-amb-tester (dointersect x y (z))
+  (if (bound? z)
+      (intersection x y z)
+      (intersection x y)))
+(define-amb-tester (dounion x y (z))
+  (if (bound? z)
+      (union x y z)
+      (union x y)))
+(define-amb-tester (dodiff x y (z))
+  (if (bound? z)
+      (difference x y z)
+      (difference x y)))
+(define-amb-tester (doand x y (z))
+  (if (bound? z)
+      (and x y z)
+      (and x y)))
+(define-amb-tester (door x y (z))
+  (if (bound? z)
+      (or x y z)
+      (or x y)))
+
 (define-tester (random-choice n (numrange))
   (default! numrange (config 'fixmax (* n 8)))
   (when (and (config 'int_max) (> numrange (config 'int_max)))
@@ -32,9 +53,25 @@
 	(set+! answer (string (integer->char (+ start i)))))
       answer)))
 
+(define zero-30 (nrange 0 30))
+
 (evaltester 100 (choice-size (intersection (nrange 0 300) (nrange 200 800))))
 (applytester (choice 20 21 22 23 24 25 26 27 28 29) intersection
 	     (nrange 0 30) (nrange 20 40))
+(evaltester 100 (choice-size (dointersect (nrange 0 300) (nrange 200 800))))
+(applytester (choice 20 21 22 23 24 25 26 27 28 29) dointersect
+	     (nrange 0 30) (nrange 20 40))
+
+(dotimes (i 5)
+  (applytester (choice 20 21 22 23 24 25 26 27 28 29) dointersect
+	       zero-30 (nrange 20 40))
+  (applytester {} dointersect  {} zero-30)
+  (applytester {} dointersect  zero-30 {} )
+  (applytester (nrange 20 30) dointersect zero-30 (nrange 20 40))
+  (applytester zero-30 dointersect  zero-30 zero-30)
+  (applytester zero-30 dounion  {} zero-30)
+  (applytester zero-30 dounion  zero-30 {})
+  (applytester zero-30 dounion  zero-30 zero-30))
 
 (applytester (choice 0 1 2 3 4 10 11 12 13 14) union (nrange 0 5) (nrange 10 15))
 
