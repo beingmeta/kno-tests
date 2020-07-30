@@ -146,7 +146,7 @@
 
 (applytester #f procedure-cname factr)
 (applytester 'err procedure-cname #"packet")
-(applytester "car" procedure-cname car)
+(applytester "car_prim" procedure-cname car)
 (applytester "open_output_file" procedure-cname open-output-file)
 (applytester #("pair") procedure-typeinfo car)
 (applytester #f procedure-typeinfo load)
