@@ -717,7 +717,8 @@ pack-index:
 	@${header} "■■■■■■■■ Testing repack index"
 	@rm -f packed.index
 	@${RUN} ${KNOX} ${PACKINDEX} data/misc.index packed.index ${RUNCONF} OVERWRITE=yes TESTLOAD=common.scm;
-	@${RUN} ${KNOX} indexcompare.scm data/misc.index packed.index ${RUNCONF} TESTLOAD=common.scm;
+	@if test -f packed.index; then \
+	  ${RUN} ${KNOX} indexcompare.scm data/misc.index packed.index ${RUNCONF} TESTLOAD=common.scm; fi;
 
 split-index:
 	@${header} "■■■■■■■■ Testing split index"
