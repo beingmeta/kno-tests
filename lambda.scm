@@ -69,6 +69,15 @@
 (applytest 'err doctest-1 3)
 (applytest 'err doctest-1 3 4 5)
 
+;;;; Optionals and rest args
+
+(define (op2 x y (z) . args)
+  (reverse args))
+
+(applytest '(0.2 0.1) (op2 3 4 9 0.1 0.2))
+(applytest '(0.1) (op2 3 4 9 0.1))
+(applytest '() (op2 3 4))
+
 ;;; Thunks
 
 (define just17 (thunk 17))
