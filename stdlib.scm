@@ -31,17 +31,5 @@
 
 (check-modules '{morph morph/en morph/es})
 
-(define (have-brico)
-  (and (config 'bricosource)
-       (or (position #\@ (config 'bricosource) )
-	   (position #\: (config 'bricosource) )
-	   (file-exists? (config 'bricosource)))
-       (onerror (begin (get-module 'brico) #t) #f)))
 
-(when (have-brico)
-  (check-modules '{brico brico/dterms brico/indexing brico/lookup
-		   brico/analytics brico/maprules brico/xdterms
-		   brico/build/wordnet
-		   knodules/usebrico knodules/defterm
-		   xtags rdf audit}))
 

@@ -14,6 +14,7 @@
 
 (load-component "libscm.scm")
 (load-component "stdlib.scm")
+(load-component "brico.scm")
 
 (when trouble (exit 1))
 
