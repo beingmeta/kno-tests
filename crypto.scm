@@ -1,5 +1,9 @@
 ;;; -*- Mode: scheme; text-encoding: utf-8; -*-
 
+(when (not (get-module 'crypto))
+  (logwarn |SkippingTest| "The crypto module is not installed")
+  (exit))
+
 (load-component "common.scm")
 
 (use-module '{crypto pem})
