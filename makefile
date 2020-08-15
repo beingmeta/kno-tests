@@ -77,7 +77,7 @@ all_tests alltests: cleanlogs
 	if [ -f ../.malloc ] && [ -f ../.buildmode ]; then \
           malloc=`cat ../.malloc`; build=`cat ../.buildmode`; \
 	  echo "Running alltests with malloc=$${malloc} and build=$${build}"; fi;
-	make libtests cmodules tables dbs framedbs
+	make libtests tables dbs framedbs
 	make optimize_modules
 	make cmdtests
 	@${header} "■■■■■■■■ Done with alltests"
@@ -104,14 +104,14 @@ schemetest schemetests: r4rs exceptions choices sequences breaks numbers regex x
         lambda conditionals iterators binders errfns requests compounds binio \
 	reflect hashsets eval loading modules quasiquote promises ffi configs opts appenv \
 	picktest cachecall texttools webtools timefns sysprims startup stringprims \
-	i18n misc gctests gcoverflow profiler sqlite tail \
+	i18n misc gctests gcoverflow profiler sqlite tail crypto \
 	fileprims xml
 scheme optscheme: schemetests
 	@${header} "■■■■■■■■ Running optimized scheme tests ${RUNCONF}"
 	make RUNCONF="TESTOPTIMIZED=yes ${RUNCONF}" r4rs choices sequences misctest configs reflect \
 	  exceptions picktest cachecall timefns sysprims compounds i18n fileprims lambda \
 	  numbers regex xml texttools eval binders conditionals errfns \
-          requests sysprims timefns breaks eval gctests gcoverflow
+          requests sysprims timefns breaks eval gctests crypto gcoverflow
 	@${header} "■■■■■■■■ Completed optimized scheme tests ${RUNCONF}"
 
 loadmods load_modules:
@@ -543,15 +543,15 @@ scripts: chainscripts batchscripts atexit_tests utilscripts
 
 execscripts:
 	@${header} "■■■■■■■■ Running exec tests ■■■■■■■■"
-	@@test_env@ ${KNOX} ./exectest.scm a "b b" c foobar=8 quux=1/2 4 1/3 9/3 5.9 :x
+	@${TEST_ENV} ${KNOX} ./exectest.scm a "b b" c foobar=8 quux=1/2 4 1/3 9/3 5.9 :x
 	@${header} "■■■■■■■■ Running exec test as script ■■■■■■■■"
-	@@test_env@ ./exectest.scm a "b b" c foobar=8 quux=1/2 4 1/3 9/3 5.9 :x
+	@${TEST_ENV} ./exectest.scm a "b b" c foobar=8 quux=1/2 4 1/3 9/3 5.9 :x
 	@${header} "■■■■■■■■ Done with exec tests ■■■■■■■■"
 
 chainscripts: execscripts
 	@${header} "■■■■■■■■ Testing scripts which call CHAIN"
 	@rm -f chaintest.log; touch chaintest.failed;
-	@@test_env@ \
+	@${TEST_ENV} \
 	        ${KNOX} chaintest.scm > chaintest.log && \
 		${KNOX} chaintest.scm 0 30 > chaintest.log && \
 		${KNOX} chaintest.scm 10 50 > chaintest.log && \
@@ -564,7 +564,7 @@ knotask_normal:
 	@${header} "■■■■■■■■ Testing knotask execution success and cleanliness"
 	@rm -f _countup.log _countup.err _countup.done
 	@rm -f  _countup.finished _countup.died _countup.pid batchscripts.log
-	@@test_env@ ../dbg/knotask countup.scm "_countup.finished" 10 1 QUIET=yes LOGLEVEL=3;
+	@${TEST_ENV} ../dbg/knotask countup.scm "_countup.finished" 10 1 QUIET=yes LOGLEVEL=3;
 	@sleep 3
 	@if (test ! -f _countup.pid); then \
 	   ./batchfail knotask _countup.pid NOT CREATED; fi;
@@ -591,7 +591,7 @@ knotask_normal:
 
 knotask_error: knotask_normal
 	@${header} "■■■■■■■■ "Starting knotask error test""
-	@@test_env@ ../dbg/knotask countup.scm ERROR=yes "_countup.finished" 10 1 QUIET=yes LOGLEVEL=3;
+	@${TEST_ENV} ../dbg/knotask countup.scm ERROR=yes "_countup.finished" 10 1 QUIET=yes LOGLEVEL=3;
 	@sleep 12;
 	@${header} This should have been deleted by the watch process
 	@if (test -f _countup.pid); then \
@@ -609,7 +609,7 @@ knotask_error: knotask_normal
 
 knotask_signal: knotask_error
 	@${header} "■■■■■■■■ "Starting knotask kill test""
-	@@test_env@ ../dbg/knotask countup.scm "_countup.killed" 10 1 QUIET=yes LOGLEVEL=3;
+	@${TEST_ENV} ../dbg/knotask countup.scm "_countup.killed" 10 1 QUIET=yes LOGLEVEL=3;
 	@sleep 3;
 	@kill -9 `cat _countup.pid`; sleep 12
 	@${header} This should have been deleted by the watch process
@@ -632,7 +632,7 @@ batchscripts: knotask_signal
 chained_batchscripts:
 	@${header} "■■■■■■■■ Testing batch scripts which call CHAIN"
 	@rm -f _chaintest.*
-	@@test_env@ ../dbg/knotask chaintest.scm
+	@${TEST_ENV} ../dbg/knotask chaintest.scm
 	@${header} "■■■■■■■■ Done testing batch scripts which call CHAIN"
 
 pipes:
@@ -648,7 +648,7 @@ atexit_tests: atexit_kill atexit_quit atexit_term
 
 atexit_normal:
 	@rm -f ./_atexit*;
-	@@test_env@ ${KNOX} ./atexit.scm SLEEP4=3 QUIET=yes LOGLEVEL=4 ; \
+	@${TEST_ENV} ${KNOX} ./atexit.scm SLEEP4=3 QUIET=yes LOGLEVEL=4 ; \
 	if test -f ./_atexit.oldout; then \
 	  ./batchfail atexit.scm Earlier atexit handler called; \
 	elif test ! -f ./_atexit.out; then \
@@ -659,7 +659,7 @@ atexit_normal:
 	fi;
 atexit_term: atexit_normal
 	@rm -f ./_atexit_term.pid
-	@@test_env@ ${KNOX} ./atexit.scm PREFIX=_atexit_term SLEEP4=20 QUIET=yes LOGLEVEL=4 & \
+	@${TEST_ENV} ${KNOX} ./atexit.scm PREFIX=_atexit_term SLEEP4=20 QUIET=yes LOGLEVEL=4 & \
 	sleep 3; kill `cat ./_atexit_term.pid`; sleep 3; \
 	if test -f ./_atexit_term.pid; then \
 	  ./batchfail "ATEXIT handler not run on SIGTERM, .pid file still exists"; \
@@ -668,7 +668,7 @@ atexit_term: atexit_normal
 	fi;
 atexit_quit: atexit_normal
 	@rm -f ./_atexit_quit.pid
-	@@test_env@ ${KNOX} ./atexit.scm PREFIX=_atexit_quit SLEEP4=20 QUIET=yes LOGLEVEL=4 &
+	@${TEST_ENV} ${KNOX} ./atexit.scm PREFIX=_atexit_quit SLEEP4=20 QUIET=yes LOGLEVEL=4 &
 	sleep 3 ; kill -s QUIT `cat ./_atexit_quit.pid` ; sleep 3 ; \
 	if test -f ./_atexit_quit.pid; then \
 	  echo "Success: ATEXIT handlers not run on SIGQUIT"; \
@@ -677,7 +677,7 @@ atexit_quit: atexit_normal
 	fi;
 atexit_kill: atexit_normal
 	@rm -f ./_atexit_kill.pid
-	@@test_env@ ${KNOX} ./atexit.scm PREFIX=_atexit_kill SLEEP4=20 QUIET=yes LOGLEVEL=4 & \
+	@${TEST_ENV} ${KNOX} ./atexit.scm PREFIX=_atexit_kill SLEEP4=20 QUIET=yes LOGLEVEL=4 & \
 	sleep 3 && kill -s KILL `cat ./_atexit_kill.pid` && sleep 3 && \
 	if test -f ./_atexit_kill.pid; then \
 	  echo "Success: ATEXIT handlers not run on SIGKILL"; \
@@ -866,14 +866,6 @@ optscheme_leaktest:
 .PHONY:	optimize_modules_leaktest
 
 # CMODULE tests
-
-cmodules: @TEST_CMODULES@
-
-sqlite:
-
-libarchive:
-
-zlib:
 
 crypto cryptotest:
 	@${RUN} ${KNOX} crypto.scm ${RUNCONF}
