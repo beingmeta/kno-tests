@@ -77,7 +77,8 @@ all_tests alltests: cleanlogs
 	if [ -f ../.malloc ] && [ -f ../.buildmode ]; then \
           malloc=`cat ../.malloc`; build=`cat ../.buildmode`; \
 	  echo "Running alltests with malloc=$${malloc} and build=$${build}"; fi;
-	make libtests tables dbs framedbs
+	make schemetests optschemetests
+	make tables dbs framedbs
 	make optimize_modules
 	make cmdtests
 	@${header} "■■■■■■■■ Done with alltests"
@@ -92,7 +93,7 @@ buildinfo:
 
 .PHONY: default alltests all_tests smoke smoketest clean cleanlogs testclean cleantests buildinfo
 
-libtests: scheme optscheme threads slotmaps
+libtests: schemetests optschemetests threads slotmaps
 dbs: pools indexes
 cmdtests:
 	@echo "# ■■■■■■■■ Running command line tests ${RUNCONF}"
@@ -100,13 +101,13 @@ cmdtests:
 	make execscripts chainscripts batchscripts chained_batchscripts utilscripts
 
 static-tests: schemetests optscheme loadmods optmods slotmaps tables pools indexes framedbs
-schemetest schemetests: r4rs exceptions choices sequences breaks numbers regex xtypes \
+schemetests: r4rs exceptions choices sequences breaks numbers regex xtypes \
         lambda conditionals iterators binders errfns requests compounds binio \
 	reflect hashsets eval loading modules quasiquote promises ffi configs opts appenv \
 	picktest cachecall texttools webtools timefns sysprims startup stringprims \
 	i18n misc gctests gcoverflow profiler sqlite tail crypto \
 	fileprims xml
-scheme optscheme: schemetests
+optschemetests: schemetests
 	@${header} "■■■■■■■■ Running optimized scheme tests ${RUNCONF}"
 	make RUNCONF="TESTOPTIMIZED=yes ${RUNCONF}" r4rs choices sequences misctest configs reflect \
 	  exceptions picktest cachecall timefns sysprims compounds i18n fileprims lambda \
