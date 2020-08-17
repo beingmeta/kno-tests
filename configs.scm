@@ -196,6 +196,13 @@
 (test-config 'runbase)
 (test-config 'randomseed)
 
+(config! 'randomseed 2434343)
+(config! 'randomseed "some random string")
+(config! 'randomseed 'time)
+(config! 'randomseed (timestamp))
+(errtest (config! 'randomseed 'x))
+(errtest (config! 'randomseed 3.5))
+
 (applytest fixnum? config 'runuser)
 (applytest fixnum? config 'rungroup)
 (applytest fixnum? config 'maxnproc)
