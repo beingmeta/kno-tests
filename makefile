@@ -76,10 +76,13 @@ cleanlogs testclean cleantests cleantest:
 all_tests alltests: cleanlogs
 	if [ -f ../.malloc ] && [ -f ../.buildmode ]; then \
           malloc=`cat ../.malloc`; build=`cat ../.buildmode`; \
-	  echo "Running alltests with malloc=$${malloc} and build=$${build}"; fi;m
-	@make schemetests optschemetests && make tables dbs && make framedbs && \
-	  make optimize_modules && make cmdtests && \
-	  ${header} "■■■■■■■■ Done with alltests"
+	  echo "Running alltests with malloc=$${malloc} and build=$${build}"; fi;
+	make schemetests optschemetests
+	make tables dbs
+	make framedbs
+	make optimize_modules
+	make cmdtests
+	${header} "■■■■■■■■ Done with alltests";
 
 smoke smoketest:
 	@${RUN} ${KNOX} smoke.scm ${RUNCONF}
