@@ -76,12 +76,10 @@ cleanlogs testclean cleantests cleantest:
 all_tests alltests: cleanlogs
 	if [ -f ../.malloc ] && [ -f ../.buildmode ]; then \
           malloc=`cat ../.malloc`; build=`cat ../.buildmode`; \
-	  echo "Running alltests with malloc=$${malloc} and build=$${build}"; fi;
-	make schemetests optschemetests
-	make tables dbs framedbs
-	make optimize_modules
-	make cmdtests
-	@${header} "■■■■■■■■ Done with alltests"
+	  echo "Running alltests with malloc=$${malloc} and build=$${build}"; fi;m
+	@make schemetests optschemetests && make tables dbs && make framedbs && \
+	  make optimize_modules && make cmdtests && \
+	  ${header} "■■■■■■■■ Done with alltests"
 
 smoke smoketest:
 	@${RUN} ${KNOX} smoke.scm ${RUNCONF}
@@ -364,10 +362,10 @@ kpoolsnappytest:
 kpoolzstdtest:
 	@make TESTBASE=kpoolzstd RUNCONF="${KPOOL} ${ZSTD} ${RUNCONF}" pooltest
 
-lvldbpools lvldbpooltests:
-	@make TESTBASE=lvldbpool RUNCONF="SLOTCODES=#f POOLTYPE=leveldb POOLMOD=leveldb ${RUNCONF}" pooltest
-rckdbpools rckdbpooltests:
-	@make TESTBASE=rckdbpool RUNCONF="SLOTCODES=#f POOLTYPE=rocksdb POOLMOD=rocksdb ${RUNCONF}" pooltest
+leveldbpools leveldbpooltests:
+	@make TESTBASE=leveldb RUNCONF="SLOTCODES=#f POOLTYPE=leveldb POOLMOD=leveldb ${RUNCONF}" pooltest
+rocksdbpools rocksdbpooltests:
+	@make TESTBASE=rocksdb RUNCONF="SLOTCODES=#f POOLTYPE=rocksdb POOLMOD=rocksdb ${RUNCONF}" pooltest
 
 kpools kpooltests: kpooltest kpool32test kpool64test kpoolztest \
         kpoolsnappytest kpoolzstdtest
@@ -408,10 +406,10 @@ memindexes memindex:
 
 typeindexes typeindex:
 	@make TESTBASE=temp/typekeys.index RUNCONF="INDEXTYPE=typeindex INDEXMOD=knodb/typeindex" indextest
-lvldbindexes lvldbindex:
-	@make TESTBASE=templvl.index RUNCONF="INDEXTYPE=leveldb INDEXMOD=leveldb" indextest
-rckdbindexes rckdbindex:
-	@make TESTBASE=temprck.index RUNCONF="INDEXTYPE=rocksdb INDEXMOD=rocksdb" indextest
+leveldbindexes leveldbindex:
+	@make TESTBASE=templeveldb.index RUNCONF="INDEXTYPE=leveldb INDEXMOD=leveldb" indextest
+rocksdbindexes rocksdbindex:
+	@make TESTBASE=temprocksdb.index RUNCONF="INDEXTYPE=rocksdb INDEXMOD=rocksdb" indextest
 
 hashindex32:
 	@make TESTBASE=tmphash32.index RUNCONF="INDEXTYPE=hashindex OFFTYPE=B32" indextest
@@ -450,20 +448,20 @@ indextests indexes: fileindexes hashindexes memindexes kindexes
 framedb:
 	@${header} "■■■■■■■■ Running frame/database tests, ${TESTBASE} ${TESTSIZE} ${RUNCONF}";
 	rm -rf ${TESTBASE}*.pool ${TESTBASE}*.index
-	@${RUN} ${KNOX} framedb.scm ${TESTBASE}db init \
+	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames init \
 		COUNT=${TESTSIZE} ${FRAMEDB_FILES} \
 		${RUNCONF};
-	@${RUN} ${KNOX} framedb.scm ${TESTBASE}db COUNT=${TESTSIZE} ${RUNCONF};
-	@${RUN} ${KNOX} framedb.scm ${TESTBASE}db COUNT=${TESTSIZE} \
+	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} ${RUNCONF};
+	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
 		 ${RUNCONF} CACHELEVEL=2;
-	@${RUN} ${KNOX} framedb.scm ${TESTBASE}db COUNT=${TESTSIZE} \
+	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
 		 ${RUNCONF} CACHELEVEL=3;
 	@${header} "■■■■■■■■ Testing database creation with CACHELEVEL=2";
-	@${RUN} ${KNOX} framedb.scm ${TESTBASE}db init COUNT=${TESTSIZE} 	\
+	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames init COUNT=${TESTSIZE} 	\
 		${FRAMEDB_FILES} ${RUNCONF} CACHELEVEL=2;
-	@${RUN} ${KNOX} framedb.scm ${TESTBASE}db COUNT=${TESTSIZE} \
+	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
 		 ${RUNCONF} CACHELEVEL=2;
-	@${RUN} ${KNOX} framedb.scm ${TESTBASE}db COUNT=${TESTSIZE} \
+	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
 		 ${RUNCONF} CACHELEVEL=3;
 	@${header} "■■■■■■■■ Finished frame/database tests, ${TESTBASE} ${TESTSIZE} ${RUNCONF} ■■■■■■■■■■■■■■■■";
 
@@ -510,10 +508,10 @@ framedb_knodb64:
 framedb_knodb32:
 	@make TESTBASE=tmpknodb32 RUNCONF="${KPOOL} ${KINDEX} ${OFFB32}" framedb
 
-lvldbframes lvldbframedb:
-	@make TESTBASE=lvldb RUNCONF="POOLTYPE=leveldb INDEXTYPE=leveldb INDEXMOD=leveldb POOLMOD=leveldb" framedb
-rckdbframes rckdbframedb:
-	@make TESTBASE=rckdb RUNCONF="POOLTYPE=rocksdb INDEXTYPE=rocksdb INDEXMOD=rocksdb POOLMOD=rocksdb" framedb
+leveldbframes leveldbframedb:
+	@make TESTBASE=leveldb RUNCONF="POOLTYPE=leveldb INDEXTYPE=leveldb INDEXMOD=leveldb POOLMOD=leveldb" framedb
+rocksdbframes rocksdbframedb:
+	@make TESTBASE=rocksdb RUNCONF="POOLTYPE=rocksdb INDEXTYPE=rocksdb INDEXMOD=rocksdb POOLMOD=rocksdb" framedb
 
 framedb_knodb: framedb_knodb32 framedb_knodb40 framedb_knodb64
 
@@ -535,8 +533,10 @@ randomtests:
 
 .PHONY: randomtests xml xmltests crypto cryptotests
 
-leveldbtests: lvldbframes lvldbpools lvldbindexes
-rocksdbtests: rckdbframes rckdbpools rckdbindexes
+leveldb leveldbtests: leveldbpools leveldbindexes
+	@make leveldbframes
+rocksdb rocksdbtests: rocksdbpools rocksdbindexes
+	@make rocksdbframes
 
 # Scripting tests
 
@@ -874,6 +874,6 @@ crypto cryptotest:
 
 #   ;;;  Local variables: ***
 #   ;;;  compile-command: "make -j" ***
-#   ;;;  indent-tabs-mode: nil ***
+#   ;;;  indent-tabs-mode: t ***
 #   ;;;  End: ***
 
