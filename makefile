@@ -102,18 +102,19 @@ cmdtests:
 	make execscripts chainscripts batchscripts chained_batchscripts utilscripts
 
 static-tests: schemetests optscheme loadmods optmods slotmaps tables pools indexes framedbs
-schemetests: r4rs exceptions choices sequences breaks numbers regex xtypes \
-        lambda conditionals iterators binders errfns requests compounds binio \
+schemetests: r4rs choices sequences numbers regex xtypes compounds binio requests \
+	exceptions breaks errfns lambda tail conditionals iterators binders \
 	reflect hashsets eval loading modules quasiquote promises ffi configs opts appenv \
 	picktest cachecall texttools webtools timefns sysprims startup stringprims \
 	i18n misc gctests gcoverflow profiler sqlite tail crypto \
 	fileprims xml
-optschemetests: schemetests
+optscheme optschemetests: schemetests
 	@${header} "■■■■■■■■ Running optimized scheme tests ${RUNCONF}"
-	make RUNCONF="TESTOPTIMIZED=yes ${RUNCONF}" r4rs choices sequences misctest configs reflect \
-	  exceptions picktest cachecall timefns sysprims compounds i18n fileprims lambda \
+	make RUNCONF="TESTOPTIMIZED=yes ${RUNCONF}" \
+	  r4rs choices sequences misctest configs reflect eval lambda tail \
+	  exceptions picktest cachecall timefns sysprims compounds i18n fileprims \
 	  numbers regex xml texttools eval binders conditionals errfns \
-          requests sysprims timefns breaks eval gctests crypto gcoverflow
+          requests sysprims timefns gctests crypto gcoverflow
 	@${header} "■■■■■■■■ Completed optimized scheme tests ${RUNCONF}"
 
 scheme: optschemetests
