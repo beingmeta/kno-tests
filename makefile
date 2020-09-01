@@ -77,8 +77,7 @@ all_tests alltests: cleanlogs
 	if [ -f ../.malloc ] && [ -f ../.buildmode ]; then \
           malloc=`cat ../.malloc`; build=`cat ../.buildmode`; \
 	  echo "Running alltests with malloc=$${malloc} and build=$${build}"; fi;
-	make schemetests optschemetests
-	make tables dbs
+	make libtests tables dbs
 	make framedbs
 	make optimize_modules
 	make cmdtests
@@ -95,6 +94,7 @@ buildinfo:
 .PHONY: default alltests all_tests smoke smoketest clean cleanlogs testclean cleantests buildinfo
 
 libtests: schemetests optschemetests threads slotmaps
+
 dbs: pools indexes
 cmdtests:
 	@echo "# ■■■■■■■■ Running command line tests ${RUNCONF}"
@@ -117,7 +117,7 @@ optscheme optschemetests: schemetests
           requests sysprims timefns gctests crypto gcoverflow
 	@${header} "■■■■■■■■ Completed optimized scheme tests ${RUNCONF}"
 
-scheme: optscheme
+scheme: optschemetests
 
 loadmods load_modules:
 	@${header} "■■■■■■■■ Testing default module loads ${RUNCONF}"
