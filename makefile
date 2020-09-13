@@ -3,7 +3,8 @@
 # This file is a part of beingmeta's Kno implementation
 
 MAKEFLAGS = -s
-export KNO_LOADPATH=../src/libscm/:../src/stdlib/:
+export KNO_LIBSCM_DIR=../src/libscm/
+export KNO_LOADPATH=../src/brico/:../src/stdlib/:
 export KNO_DLOADPATH=../lib/kno
 export LD_LIBRARY_PATH=../lib
 export DYLD_LIBRARY_PATH=../lib
