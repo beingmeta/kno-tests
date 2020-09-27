@@ -13,7 +13,7 @@ export KNO_OFFLINE=${OFFLINE}
 
 # Change this to echo to output test headers. Note that these aren't
 # much use when running tests with -j
-header          = $(shell echo "\#")
+header          = $(shell echo ":")
 TESTPROG	= ./runtest
 MEMTESTER	= ./memtest
 LEAKTESTER	= ./leaktest
