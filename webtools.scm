@@ -17,17 +17,18 @@
 (define test-input-2 
   "<p title=\"From &ldquo;greek&rdquo;\">From Α to Ω</p>")
 (define test-result-2
-  '(#[%XMLTAG  P %CONTENT  ("From Α to Ω")
-      %ATTRIBS  #("title" #f "From “greek”")
-      %QNAME  P %ATTRIBIDS  TITLE 
-      TITLE "From “greek”"]))
+  (list (sort-slotmap #[%XMLTAG  P %CONTENT  ("From Α to Ω")
+			%ATTRIBS  #("title" #f "From “greek”")
+			%QNAME  P %ATTRIBIDS  TITLE 
+			TITLE "From “greek”"])))
 (applytester test-result-2 xmlparse test-input-2)
 
 (define test-input-3
   "<p>Two plus three is <?=(+ 2 3)?> </p>")
 (define test-result-3
-  '(#[%XMLTAG P %CONTENT 
-      ("Two plus three is " (BEGIN (+ 2 3)) " ") %QNAME P]))
+  (list (sort-slotmap 
+	 #[%XMLTAG P %CONTENT 
+	   ("Two plus three is " (BEGIN (+ 2 3)) " ") %QNAME P])))
 (applytester test-result-3 knoml/parse test-input-3)
 (evaltest "<p>Two plus three is 5 </p>"
 	  (xml->string test-result-3))
