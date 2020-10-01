@@ -24,8 +24,8 @@
 (define profiled {fibi + fibr fib-iter})
 
 ;; With profiling, fib-iter isn't tail recursive, so we bump up the stack
-(define-init init-limit (cstack-limit))
-(cstack-limit! (* 100 init-limit))
+;;(define-init init-limit (cstack-limit))
+;;(cstack-limit! (* 10 init-limit))
 
 (do-choices (fn profiled) (config! 'profiled fn))
 
