@@ -1,5 +1,7 @@
 (load-component "common.scm")
 
+(use-module 'texttools)
+
 (define est-time1 #T2011-12-03T03:23:00EST)
 (define gmt-time1 #T2011-12-03T08:23:00Z)
 
@@ -104,6 +106,10 @@
 (define (tsince t) (->exact (round (time-since t))))
 (define (tuntil t) (->exact (round (time-until t))))
 
+;; Alpine (at least) returns two digit years
+(define (adjust-date-result s)
+  (textsubst s #((subst "/" "/19") (isdigit) (isdigit) (eos))))
+
 (let* ((now (timestamp))
        (tomorrow (timestamp+ (* 24 3600)))
        (yesterday (timestamp+ (* -24 3600)))
@@ -191,7 +197,7 @@
   (applytest "Dec1979" get bday 'my)
   (applytest "3Dec1979 03:15:00AM" get bday 'shortstring)
   ;; (applytest "03:15:00 AM" get bday 'timestring)
-  (applytest "12/03/1979" get bday 'datestring)
+  (evaltest "12/03/1979" (adjust-date-result (get bday 'datestring)))
 ;;  (applytest "Monday 03 December 1979 03:15:00 AM -0500" get bday 'fullstring)
   (applytest 'mon get bday 'dowid)
   (applytest 'dec get bday 'monthid))

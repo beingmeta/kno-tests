@@ -3,7 +3,8 @@
 # This file is a part of beingmeta's Kno implementation
 
 MAKEFLAGS = -s
-export KNO_LOADPATH=../src/libscm/:../src/stdlib/:
+export KNO_LIBSCM_DIR=../src/libscm/
+export KNO_LOADPATH=../src/brico/:../src/stdlib/:
 export KNO_DLOADPATH=../lib/kno
 export LD_LIBRARY_PATH=../lib
 export DYLD_LIBRARY_PATH=../lib
@@ -12,7 +13,7 @@ export KNO_OFFLINE=${OFFLINE}
 
 # Change this to echo to output test headers. Note that these aren't
 # much use when running tests with -j
-header          = $(shell echo "\#")
+header          = $(shell echo ":")
 TESTPROG	= ./runtest
 MEMTESTER	= ./memtest
 LEAKTESTER	= ./leaktest
@@ -116,6 +117,21 @@ optscheme optschemetests: schemetests
 	  numbers regex xml texttools eval binders conditionals errfns \
           requests sysprims timefns gctests crypto gcoverflow
 	@${header} "■■■■■■■■ Completed optimized scheme tests ${RUNCONF}"
+ziptest: libscm.zip
+	@${header} "■■■■■■■■ Running scheme tests with zip sources ${RUNCONF}"
+	make RUNCONF="LIBSCM=libscm.zip ${RUNCONF}" \
+	  r4rs choices sequences misctest configs reflect eval lambda tail \
+	  exceptions picktest cachecall timefns sysprims compounds i18n fileprims \
+	  numbers regex xml texttools eval binders conditionals errfns \
+          requests sysprims timefns gctests crypto gcoverflow
+	make RUNCONF="LIBSCM=libscm.zip TESTOPTIMIZED=yes ${RUNCONF}" \
+	  r4rs choices sequences misctest configs reflect eval lambda tail \
+	  exceptions picktest cachecall timefns sysprims compounds i18n fileprims \
+	  numbers regex xml texttools eval binders conditionals errfns \
+          requests sysprims timefns gctests crypto gcoverflow
+	@${header} "■■■■■■■■ Completed optimized scheme tests ${RUNCONF}"
+libscm.zip: ../src/libscm/*.scm ../src/libscm/*/*.scm
+	cd ../src/libscm; zip -ry ../tests/libscm.zip *
 
 scheme: optschemetests
 
