@@ -133,7 +133,7 @@ ziptest: libscm.zip
 libscm.zip: ../src/libscm/*.scm ../src/libscm/*/*.scm
 	cd ../src/libscm; zip -ry ../tests/libscm.zip *
 
-scheme: optschemetests
+core scheme: optschemetests
 
 loadmods load_modules:
 	@${header} "■■■■■■■■ Testing default module loads ${RUNCONF}"
