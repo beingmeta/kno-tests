@@ -427,7 +427,9 @@ memindexes memindex:
 	@make TESTBASE=memfile.index RUNCONF="INDEXTYPE=memindex" indextest
 
 typeindexes typeindex:
-	@make TESTBASE=temp/typekeys.index RUNCONF="INDEXTYPE=typeindex INDEXMOD=knodb/typeindex" indextest
+	@make TESTBASE=temptypekeys.index RUNCONF="INDEXTYPE=typeindex INDEXMOD=knodb/typeindex" indextest
+blockindexes blockindex:
+	@make TESTBASE=tempblockindex.index RUNCONF="INDEXTYPE=blockindex INDEXMOD=knodb/blockindex" indextest
 leveldbindexes leveldbindex:
 	@make TESTBASE=templeveldb.index RUNCONF="INDEXTYPE=leveldb INDEXMOD=leveldb" indextest
 rocksdbindexes rocksdbindex:
