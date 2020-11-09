@@ -107,7 +107,7 @@ schemetests: r4rs choices sequences numbers regex xtypes compounds binio request
 	exceptions breaks errfns lambda tail conditionals iterators binders \
 	reflect hashsets eval loading modules quasiquote promises ffi configs opts appenv \
 	picktest cachecall texttools webtools timefns sysprims startup stringprims \
-	i18n misc gctests gcoverflow profiler sqlite tail crypto \
+	i18n misc gctests gcoverflow profiler sqlite tail compress crypto \
 	fileprims xml
 optscheme optschemetests: schemetests
 	@${header} "■■■■■■■■ Running optimized scheme tests ${RUNCONF}"
@@ -300,6 +300,9 @@ profiling profiler:
 xml xmltest:
 	@${RUN} ${KNOX} xml.scm ${RUNCONF}
 	@${header} "■■■■ Completed xml tests ${RUNCONF}"
+compress compresstest compression:
+	@${RUN} ${KNOX} compress.scm ${RUNCONF}
+	@${header} "■■■■ Completed compression tests ${RUNCONF}"
 
 temp:
 	@${RUN} ${KNOX} temp.scm ${RUNCONF}
