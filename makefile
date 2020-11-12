@@ -40,7 +40,7 @@ FILEPOOL	= POOLTYPE=filepool
 FILEINDEX	= INDEXTYPE=fileindex
 HASHINDEX	= INDEXTYPE=hashindex
 KINDEX	        = INDEXTYPE=kindex
-MEMINDEX	= INDEXTYPE=memindex
+LOGINDEX	= INDEXTYPE=logindex
 OFFB40		= OFFTYPE=B40
 OFFB64		= OFFTYPE=B64
 OFFB32		= OFFTYPE=B32
@@ -426,8 +426,8 @@ indextest:
 fileindexes fileindex:
 	@make TESTBASE=tmpfile.index RUNCONF="INDEXTYPE=fileindex" indextest
 
-memindexes memindex:
-	@make TESTBASE=memfile.index RUNCONF="INDEXTYPE=memindex" indextest
+logindexes logindex:
+	@make TESTBASE=logindex.index RUNCONF="INDEXTYPE=logindex" indextest
 
 typeindexes typeindex:
 	@make TESTBASE=temptypekeys.index RUNCONF="INDEXTYPE=typeindex INDEXMOD=knodb/typeindex" indextest
@@ -466,9 +466,9 @@ aggindexes: aggindex aggindex_consed
 hashindexes hashindex: hashindex32 hashindex40 hashindex40x hashindex64
 kindexes kindex: kindex32 kindex40 kindex40x kindex64
 
-indextests indexes: fileindexes hashindexes memindexes kindexes
+indextests indexes: fileindexes hashindexes logindexes kindexes
 
-.PHONY: indexes indextests fileindexes hashindexes memindexes aggindexes kindexes
+.PHONY: indexes indextests fileindexes hashindexes logindexes aggindexes kindexes
 
 # Database/frames test
 
@@ -517,8 +517,8 @@ framedb_bigpool64:
 
 framedb_fileindex:
 	@make TESTBASE=tmpfileindex RUNCONF="${BIGPOOL} ${FILEINDEX} ${OFFB40}" framedb
-framedb_memindex:
-	@make TESTBASE=tmpmemindex RUNCONF="${BIGPOOL} ${MEMINDEX} ${OFFB40}" framedb
+framedb_logindex:
+	@make TESTBASE=tmplogindex RUNCONF="${BIGPOOL} ${LOGINDEX} ${OFFB40}" framedb
 framedb_oidpool32:
 	@make TESTBASE=tmpoidpool32 RUNCONF="${OIDPOOL} ${HASHINDEX} ${OFFB32}" framedb
 framedb_oidpool40:
@@ -547,7 +547,7 @@ framedbs: framedb_base \
 	framedb_kpool32 framedb_kpool40 framedb_kpool64 \
 	framedb_knodb32 framedb_knodb40 framedb_knodb64 \
 	framedb_aggregate framedb_keyslot \
-	framedb_fileindex framedb_memindex \
+	framedb_fileindex framedb_logindex \
 
 .PHONY: framedb
 
