@@ -1,6 +1,6 @@
 (check-modules '{condense defmacro defstruct dopool engine ezrecords fifo
 		 filestream gpath jsonout logctl logger mimetable
-		 mtapply mttools packetfns parsetime readfile
+		 mttools packetfns parsetime readfile
 		 sqloids stringfmts stringformats usedb varconfig})
 
 (check-modules '{bench kno/sessions kno/profiling kno/primdecls kno/threads})

@@ -139,7 +139,7 @@ loadmods load_modules:
 	@${header} "■■■■■■■■ Testing default module loads ${RUNCONF}"
 	@${RUN} ${KNOX} loadmods.scm ${RUNCONF}
 	@${header} "■■■■■■■■ Finished testing default module loads ${RUNCONF}"
-optmods optimize_modules: load_modules
+optmods optimize_modules:
 	@${header} "■■■■■■■■ Testing optimized module loads ${RUNCONF}"
 	@${RUN} ${KNOX} optmods.scm ${RUNCONF}
 	@${header} "■■■■■■■■ Finished testing optimized module loads ${RUNCONF}"
