@@ -102,7 +102,7 @@ cmdtests:
 	@echo "# ■■■ Various stderr log messages or termination warnings are normal"
 	make execscripts chainscripts batchscripts chained_batchscripts utilscripts
 
-static-tests: schemetests optscheme loadmods optmods slotmaps tables pools indexes framedbs
+static-tests: schemetests optscheme loadmods optmods zipmods slotmaps tables pools indexes framedbs
 schemetests: r4rs choices sequences numbers regex xtypes compounds binio requests \
 	exceptions breaks errfns lambda tail conditionals iterators binders \
 	reflect hashsets eval loading modules quasiquote promises ffi configs opts appenv \
@@ -143,6 +143,11 @@ optmods optimize_modules:
 	@${header} "■■■■■■■■ Testing optimized module loads ${RUNCONF}"
 	@${RUN} ${KNOX} optmods.scm ${RUNCONF}
 	@${header} "■■■■■■■■ Finished testing optimized module loads ${RUNCONF}"
+
+zipmods: load_modules
+	@${header} "■■■■■■■■ Testing module loads from zipfiles"
+	@${RUN} ${KNOX} LIBSCM=../src/libscm.zip LOADPATH=../src/stdlib.zip loadmods.scm ${RUNCONF}
+	@${header} "■■■■■■■■ Finished testing  module loads from zipfiles"
 
 .PHONY: scheme schemetest schemetests optscheme loadmodes load_modules optmodes optimize_modules
 
