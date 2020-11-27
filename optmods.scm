@@ -24,4 +24,8 @@
 (load-component "stdlib.scm")
 (load-component "brico.scm")
 
+(when (> (optimize/count-warnings) 0)
+  (optimize/list-warnings)
+  (error |OptimizeWarnings|))
+
 (when trouble (exit 1))
