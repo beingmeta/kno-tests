@@ -59,7 +59,7 @@
 (applytester #t check-version 2001 2 0)
 (applytester #t check-version 2001 0 0)
 (applytester #t check-version 2001 3)
-(applytester #f check-version 2012)
+(applytester #f check-version 2013)
 
 (applytester #t require-version 5)
 (applytester #t require-version 5 0)
