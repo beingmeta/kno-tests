@@ -6,9 +6,9 @@
 
 (unless (has-suffix (config 'exe) "/knoc") (config! 'logloaderrs #f))
 
-(use-module '{stringfmts testcapi})
+(use-module '{text/stringfmts testcapi})
 
-(get-module 'stringfmts)
+(get-module 'text/stringfmts)
 (get-module 'testcapi)
 
 (errtest (in-module))
@@ -22,24 +22,24 @@
 
 (applytest #f dynamic-load "data/nomod")
 
-(applytest overlaps? 'show% get-exports 'stringfmts)
+(applytest overlaps? 'show% get-exports 'text/stringfmts)
 (errtest (get-exports 'zyizx))
 
 (applytest pair? config 'module)
-(applytest 'void config! 'module 'stringfmts)
+(applytest 'void config! 'module 'text/stringfmts)
 
 (let ((mod (get-module 'stringfmts_alias)))
   (overlaps? 'get% (get-exports mod)))
 
-(evaltest #t (applicable? (within-module 'stringfmts get%)))
-(evaltest #t (applicable? (within-module 'stringfmts quotient~)))
-(errtest (within-module 'stringfmts (quotient~)))
+(evaltest #t (applicable? (within-module 'text/stringfmts get%)))
+(evaltest #t (applicable? (within-module 'text/stringfmts quotient~)))
+(errtest (within-module 'text/stringfmts (quotient~)))
 (errtest (within-module))
 (errtest (within-module 'qrxtm))
 
-(evaltest 5 (within-module 'stringfmts (quotient~ 17 3)))
-(errtest (within-module 'stringfmts (quotient~ 17 "three")))
-(errtest (within-module 'stringfmts (->exact (quotient~ 17 0))))
+(evaltest 5 (within-module 'text/stringfmts (quotient~ 17 3)))
+(errtest (within-module 'text/stringfmts (quotient~ 17 "three")))
+(errtest (within-module 'text/stringfmts (->exact (quotient~ 17 0))))
 
 (errtest (accessing-module 'testcapi (quotient~ zval 3)))
 (errtest (accessing-module))
@@ -47,11 +47,11 @@
 (errtest (accessing-module '(not a module) (+ 3 4)))
 
 (define zval 17)
-(errtest (within-module 'stringfmts (quotient~ zval 3)))
-(evaltest 5 (accessing-module 'stringfmts (quotient~ zval 3)))
+(errtest (within-module 'text/stringfmts (quotient~ zval 3)))
+(evaltest 5 (accessing-module 'text/stringfmts (quotient~ zval 3)))
 
 (evaltest #t (overlaps? (get-exports (get-module 'fileio)) 'open-output-file))
-(evaltest #t (overlaps? (get-exports (get-module 'stringfmts))
+(evaltest #t (overlaps? (get-exports (get-module 'text/stringfmts))
 			'get%))
 
 (modules/testcapi)
@@ -59,15 +59,15 @@
 ;; Tests recursive loading
 (use-module 'loop2mod)
 
-(applytest eq? $num get-binding 'stringfmts '$num)
-(applytest eq? $num %get-binding 'stringfmts '$num)
+(applytest eq? $num get-binding 'text/stringfmts '$num)
+(applytest eq? $num %get-binding 'text/stringfmts '$num)
 
-(applytest 'err get-binding 'stringfmts '1+)
-(applytest 'err %get-binding 'stringfmts '1+)
-(applytest 'err get-binding (get-module 'stringfmts) '1+)
-(applytest 'err %get-binding (get-module 'stringfmts) '1+)
-(applytest 'err get-binding 'stringfmts 'rem~)
-(applytest applicable? %get-binding 'stringfmts 'rem~)
+(applytest 'err get-binding 'text/stringfmts '1+)
+(applytest 'err %get-binding 'text/stringfmts '1+)
+(applytest 'err get-binding (get-module 'text/stringfmts) '1+)
+(applytest 'err %get-binding (get-module 'text/stringfmts) '1+)
+(applytest 'err get-binding 'text/stringfmts 'rem~)
+(applytest applicable? %get-binding 'text/stringfmts 'rem~)
 
 (applytest 'err get-binding #"packet" '$num)
 (applytest 'err get-binding 'zyxxyz '$num)

@@ -6,7 +6,7 @@
 
 (load-component "common.scm")
 
-(use-module '{crypto pem})
+(use-module '{crypto crypto/pem})
 
 (config! 'hexpacket #f)
 

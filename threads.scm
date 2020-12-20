@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{mttools fifo})
+(use-module '{kno/mttools fifo})
 
 (define-tester (nrange (start 0) (n 8))
   (let ((nums {}))

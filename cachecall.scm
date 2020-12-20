@@ -54,11 +54,13 @@
 (clear-callcache!)
 (applytest #f cachedcall? identity "foo")
 
+#|
 (applytest #f eq? (thread/cachecall identity "foo") (thread/cachecall identity "foo"))
 (with-threadcache 
  (applytest #t eq? 
 	    (thread/cachecall identity "foo") 
 	    (thread/cachecall identity "foo")))
+|#
 
 (applytest #f cachedcall? identity "foo")
 (applytest {} cachecall/probe identity "foo")

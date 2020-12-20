@@ -1,4 +1,4 @@
-(use-module '{webtools jsonout})
+(use-module '{webtools json/export})
 
 (define string1 "{\"c\": \":SEA\", \"b\": \"bee\", \"a\": 3}")
 

@@ -167,19 +167,19 @@
 (define (type4-stringfn c)
   (stringout "#<TYPE4" (doseq (elt c) (printout " " elt))
     ">"))
-(type-set-stringfn! 'type4 type4-stringfn)
+(store! (kno/type 'type4) 'stringfn type4-stringfn) ;; (type-set-stringfn! 'type4 type4-stringfn)
 (applytester "#<TYPE4 a b c>" lisp->string (sequence->compound '(A B C) 'type4))
-(type-set-stringfn! 'type4 #f)
+(drop! (kno/type 'type4) 'stringfn)
 (applytester "#%(type4 a b c)" lisp->string (sequence->compound '(A B C) 'type4))
 (define (type4-wrong-stringfn c) #f)
-(type-set-stringfn! 'type4 type4-wrong-stringfn)
+(store! (kno/type 'type4) 'stringfn type4-wrong-stringfn)
 (applytester "#%(type4 a b c)" lisp->string (sequence->compound '(A B C) 'type4))
-(type-set-stringfn! 'type4 type4-stringfn)
+(store! (kno/type 'type4) 'stringfn type4-stringfn)
 (applytester "#<TYPE4 a b c>" lisp->string (sequence->compound '(A B C) 'type4))
 
 (define (type4-consfn . args)
   (sequence->compound (cons "extra" args) 'type4))
-(type-set-consfn! 'type4 type4-consfn)
+(store! (kno/type 'type4) 'consfn type4-consfn)
 (applytester "extra" compound-ref #%(type4 3 4 5 "nine") 0)
 (type-set-consfn! 'type4 #f)
 (applytester 3 compound-ref #%(type4 3 4 5 "nine") 0)
@@ -187,11 +187,11 @@
 
 (define type4.1 #%(type4 3 4 5 "nine"))
 
-(applytester type4-consfn type-handlers 'type4 'consfn)
+(applytester type4-consfn type-props 'type4 'consfn)
 (applytester slotmap? type-props 'type4)
 
-(applytester type4-consfn type-handlers type4.1  'consfn)
-(applytester slotmap? type-handlers type4.1)
+(applytester type4-consfn type-props type4.1  'consfn)
+(applytester slotmap? type-props type4.1)
 
 (type-set! 'type4 'someprop "someval")
 

@@ -1,9 +1,11 @@
 (check-modules
- '{opts hashfs rulesets meltcache curlcache saveopt signature cachequeue 
-   checkurl codewalker couchdb dropbox ellipsize email fakezip fillin 
-   findcycles getcontent gravatar hashstats histogram hostinfo i18n ice 
-   mimeout oauth bugjar pump readcsv samplefns savecontent 
-   speling tinygis tracer trackrefs twilio updatefile whocalls})
+ '{opts hashfs kno/rulesets kno/meltcache curlcache saveopt crypto/signature cachequeue 
+   net/checkurl codewalker text/ellipsize net/email fakezip fillin 
+   findcycles getcontent hashstats histogram hostinfo i18n ice 
+   net/mimeout net/oauth bugjar text/readcsv samplefns 
+   text/speling trackrefs os/updatefile kno/whocalls
+   apis/gravatar apis/twilio apis/couchdb apis/dropbox  apis/tinygis
+   batch})
 
 (check-modules '{aws aws/s3 aws/ses aws/simpledb aws/sqs aws/v4
 		 aws/associates aws/dynamodb})
@@ -14,7 +16,9 @@
 		 ;; domutils/hyphenate
 		 })
 
-(check-modules '{facebook facebook/fbcall facebook/fbml})
+(check-modules '{apis/facebook apis/facebook/fbcall apis/facebook/fbml})
+
+(check-modules '{booktools/gutdb booktools/hathitrust booktools/isbn booktools/librarything booktools/openlibrary})
 
 (check-modules '{google google/drive})
 
@@ -23,13 +27,10 @@
 
 (check-modules '{misc/oidshift})
 
-(check-modules '{paypal paypal/checkout paypal/express paypal/adaptive})
+(check-modules '{apis/paypal apis/paypal/checkout apis/paypal/express apis/paypal/adaptive})
 
 ;;(check-modules '{textindex textindex/domtext})
 
-(check-modules '{twitter})
+(check-modules '{apis/twitter})
 
 (check-modules '{morph morph/en morph/es})
-
-
-

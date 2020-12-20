@@ -149,6 +149,8 @@ zipmods: load_modules
 	@${RUN} ${KNOX} LIBSCM=../src/libscm.zip LOADPATH=../src/stdlib.zip loadmods.scm ${RUNCONF}
 	@${header} "■■■■■■■■ Finished testing  module loads from zipfiles"
 
+testmods: zipmods optmods
+
 .PHONY: scheme schemetest schemetests optscheme loadmodes load_modules optmodes optimize_modules
 
 # Individual scheme tests

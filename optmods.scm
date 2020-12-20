@@ -18,11 +18,13 @@
 	     (optimize-module! mod)))
 	 (lambda (ex) (set! trouble ex) (reraise ex)))))
 
-;;(optimize-module! 'optimize)
+(when (config 'optimize2) (optimize-module! 'optimize))
 
+(define started (elapsed-time))
 (load-component "libscm.scm")
 (load-component "stdlib.scm")
 (load-component "brico.scm")
+(logwarn |Done| "After " (elapsed-time started) " seconds")
 
 (when (> (optimize/count-warnings) 0)
   (optimize/list-warnings)
