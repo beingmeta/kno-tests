@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module 'texttools)
+(use-module '{texttools})
 
 (applytest #t has-suffix "foo.scm" ".scm")
 (applytest #f has-suffix "foo.scm" ".lsp")

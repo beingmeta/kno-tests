@@ -2,14 +2,14 @@
 
 (load-component "common.scm")
 
-(use-module '{fileio logger reflection varconfig})
+(use-module '{fileio logger kno/reflect varconfig})
 
 (define (test-indexfile-deletion (fname "deltest.index"))
   (unless (file-exists? fname)
-    (make-index fname #[type hashindex slots 5000]))
+    (make-index fname #[type kindex slots 5000]))
   (let ((open1 (open-index fname)))
     (remove-file fname)
-    (let ((newmade (make-index fname #[type hashindex slots 500]))
+    (let ((newmade (make-index fname #[type kindex slots 500]))
 	  (open2 (open-index fname))
 	  (filesize (file-size fname)))
       (store! open2 "precious" 42)

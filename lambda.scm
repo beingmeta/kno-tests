@@ -2,10 +2,10 @@
 
 (load-component "common.scm")
 
-(use-module '{reflection stringfmts optimize})
-(optimize! 'stringfmts)
+(use-module '{kno/reflect text/stringfmts optimize})
+(optimize! 'text/stringfmts)
 ;; TODO: This leaks for some reason. Find it out.
-;;(reoptimize! 'stringfmts)
+;;(reoptimize! 'text/stringfmts)
 
 (applytest '("foo" "bar" "baz") (lambda x x) "foo" "bar" "baz")
 (applytest '() (lambda x x))

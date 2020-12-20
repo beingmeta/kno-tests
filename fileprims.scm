@@ -2,6 +2,8 @@
 
 (load-component "common.scm")
 
+(use-module '{binio})
+
 (define data-dir (get-component "data"))
 (define text-file (mkpath data-dir "testobj.text"))
 (define dtype-file (mkpath data-dir "testobj.dtype"))

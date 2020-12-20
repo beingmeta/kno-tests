@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module 'stringfmts)
+(use-module 'text/stringfmts)
 
 (errtest (let ((x 3)) . body))
 (errtest (let foo))
@@ -81,6 +81,6 @@
 
 
 
-(errtest (let ((x 3)) (defimport $count 'stringfmts)))
-(errtest (defimport $count-chocula 'stringfmts))
+(errtest (let ((x 3)) (defimport $count 'text/stringfmts)))
+(errtest (defimport $count-chocula 'text/stringfmts))
 

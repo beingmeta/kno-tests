@@ -53,8 +53,12 @@ if test ! -z ${PREAMBLE}; then
    echo "TEST: " ${PROGNAME} $*;
 fi;
 
-. ../dbg/runenv.sh
-. ./testenv.sh
+if [ -f ../dbg/runenv.sh ]; then
+    . ../dbg/runenv.sh;
+fi;
+if [ -f ./testenv.sh ]; then
+    . ./testenv.sh
+fi;
 
 if [ "${LOGFILE}" != "none" ]; then
     if @test_env@ ${TEST_HELPER} ${PROGNAME} $* LOGTIME=${LOGTIME} > ${LOGFILE} 2>&1; then

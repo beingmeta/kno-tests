@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{sqldb sqloids db})
+(use-module '{sqldb sqldb/oids db})
 
 (define dbmodule (get-module (config 'DBMODULE 'sqlite)))
 (use-module dbmodule)

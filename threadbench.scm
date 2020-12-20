@@ -1,7 +1,7 @@
 ;;; -*- Mode: Scheme; -*-
 
 (use-module '{optimize bench bench/threads bench/miscfns
-	      varconfig logger mttools})
+	      varconfig logger kno/mttools})
 
 (define optimized #t)
 (varconfig! optimized optimized config:bool)

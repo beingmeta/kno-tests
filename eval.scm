@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{ezrecords reflection stringfmts})
+(use-module '{ezrecords kno/reflect text/stringfmts})
 
 (define have-defmacro (get-module 'defmacro))
 
@@ -207,7 +207,7 @@
 (applytest 10 add32 7 3)
 (errtest (add32 7))
 
-;;; Reflection like tests
+;;; Kno/Reflect like tests
 
 (applytester #t string? (lisp->string if))
 (applytester #t packet? (dtype->packet if))
@@ -751,7 +751,7 @@
 (errtest (defimport bar))
 (errtest (defimport "foo" bar))
 (errtest (defimport foo 'nomodule))
-(errtest (defimport $num$ 'stringfmts))
+(errtest (defimport $num$ 'text/stringfmts))
 
 (define (test-docstrings x y)
   "This takes two arguments"
