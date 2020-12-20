@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{reflection bench/miscfns stringfmts optimize})
+(use-module '{kno/reflect kno/profile bench/miscfns stringfmts optimize})
 
 (define (show-profile arg (fcn))
   (default! fcn (if (compound? arg '%callprofile) (profile/fcn arg) arg))

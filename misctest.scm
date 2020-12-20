@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{reflection varconfig stringformats randobj})
+(use-module '{kno/reflect varconfig stringformats randobj})
 
 (optimization-leaks)
 

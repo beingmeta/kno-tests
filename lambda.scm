@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{reflection stringfmts optimize})
+(use-module '{kno/reflect stringfmts optimize})
 (optimize! 'stringfmts)
 ;; TODO: This leaks for some reason. Find it out.
 ;;(reoptimize! 'stringfmts)

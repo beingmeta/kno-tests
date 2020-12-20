@@ -2,7 +2,7 @@
 
 (load "common.scm")
 
-(use-module 'reflection)
+(use-module 'kno/reflect)
 
 (define dload-suffix (get (config 'buildinfo) '|KNO_DLOAD_SUFFIX|))
 

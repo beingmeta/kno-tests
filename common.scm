@@ -4,7 +4,7 @@
 ;; (fileout (glom (getppid) "." (getpid)  ".started") 
 ;;   (config 'sessionid) "\n" (config 'cmdline))
 
-(use-module '{reflection varconfig optimize logger})
+(use-module '{kno/reflect varconfig optimize logger})
 
 (define started (elapsed-time))
 (define logtime-file #f)

@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{fileio logger reflection varconfig})
+(use-module '{fileio logger kno/reflect varconfig})
 
 (define (test-indexfile-deletion (fname "deltest.index"))
   (unless (file-exists? fname)

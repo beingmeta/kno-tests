@@ -2,7 +2,8 @@
 
 (load-component "common.scm")
 
-(use-module '{reflection texttools ezrecords bench/miscfns optimize stringfmts})
+(use-module '{texttools ezrecords bench/miscfns optimize stringfmts})
+(use-module '{kno/reflect kno/profile})
 
 (define swapf
   (macro expr 
@@ -12,7 +13,7 @@
 	 (set! ,arg1 ,arg2)
 	 (set! ,arg2 tmp)))))
 
-(applytester 'reflection procedure-module procedure-module)
+(applytester 'kno/reflect procedure-module procedure-module)
 (applytester 'scheme procedure-module *)
 (applytester 'texttools procedure-module textsubst)
 (applytester 'bench/miscfns procedure-module fibi)
@@ -178,7 +179,7 @@
 (applytester (contains-string "conditionals.c") procedure-filename if)
 (applytester (contains-string "miscfns.scm") module-source (get-module 'bench/miscfns))
 ;;; This doesn't return the correct value
-(applytester string? module-source (get-module 'reflection))
+(applytester string? module-source (get-module 'kno/reflect))
 (errtest (module-source 5))
 (applytester #f module-source #[])
 (applytester #f module-source (make-hashtable))
@@ -260,7 +261,7 @@
 
 (applytester ambiguous? module-exported 'bench/miscfns)
 (applytester ambiguous? module-exported (get-module 'bench/miscfns))
-(applytester ambiguous? module-exported (get-module 'reflection))
+(applytester ambiguous? module-exported (get-module 'kno/reflect))
 (errtest (module-exported #f))
 (applytester '{x y} module-exported #[x 3 y 4])
 (errtest (module-exported "bench/miscfns"))
@@ -307,7 +308,7 @@
 (errtest (defimport))
 (errtest (defimport "rrzy"))
 (errtest (defimport rrzy))
-(errtest (defimport rrzy (get-module 'reflection)))
+(errtest (defimport rrzy (get-module 'kno/reflect)))
 (errtest (defimport rrzy (get-module 'bench/miscfns)))
 (errtest (defimport rrzy 'nosuchmodule))
 

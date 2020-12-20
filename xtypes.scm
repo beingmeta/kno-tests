@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{reflection varconfig stringformats randobj})
+(use-module '{kno/reflect varconfig stringformats randobj})
 
 (define xtype-test-obj
   `(#[foo 3 bar 8] #"12\0645\14789\253cdef123\105\14789"
