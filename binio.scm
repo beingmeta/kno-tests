@@ -2,6 +2,8 @@
 
 (load-component "common.scm")
 
+(use-module '{io/byteio io/dtypeio})
+
 (define sample-file (get-component "data/sample.dtype"))
 
 (define sample-object

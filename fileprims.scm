@@ -2,6 +2,8 @@
 
 (load-component "common.scm")
 
+(use-module '{io/fileio io/byteio io/dtypeio io/xtypeio})
+
 (define data-dir (get-component "data"))
 (define text-file (mkpath data-dir "testobj.text"))
 (define dtype-file (mkpath data-dir "testobj.dtype"))

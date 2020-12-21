@@ -1,7 +1,7 @@
 (check-modules '{condense defmacro defstruct dopool engine ezrecords fifo
-		 filestream gpath jsonout logctl logger mimetable
-		 mttools packetfns parsetime readfile
-		 sqloids stringfmts stringformats usedb varconfig})
+		 io/filestream gpath jsonout logctl logger mimetable
+		 mttools packetfns parsetime io/readfile
+		 stringfmts stringformats usedb varconfig})
 
 (check-modules '{bench kno/sessions kno/profiling kno/primdecls kno/threads})
 
@@ -12,7 +12,8 @@
 		 knodb/hashindexes knodb/indexes knodb/kindexes
 		 knodb/kb knodb/registry knodb/typeindex
 		 ;; Kind of legacy
-		 knodb/slotindex knodb/splitpool})
+		 knodb/slotindex knodb/splitpool
+		 knodb/sqloids})
 
 (check-modules '{bugjar bugjar/html bugjar/servlet})
 
