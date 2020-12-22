@@ -16,6 +16,8 @@
 
 (check-modules '{facebook facebook/fbcall facebook/fbml})
 
+(check-modules '{booktools/gutdb booktools/hathitrust booktools/isbn booktools/librarything booktools/openlibrary})
+
 (check-modules '{google google/drive})
 
 (check-modules '{knodules knodules/drules
