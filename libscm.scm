@@ -1,5 +1,3 @@
-(config! 'noziptools #t)
-
 (check-modules '{condense defmacro defstruct dopool engine ezrecords fifo
 		 io/filestream gpath jsonout logctl logger mimetable
 		 mttools packetfns parsetime io/readfile
