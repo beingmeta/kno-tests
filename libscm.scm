@@ -13,7 +13,7 @@
 		 knodb/kb knodb/registry knodb/typeindex
 		 ;; Kind of legacy
 		 knodb/slotindex knodb/splitpool
-		 knodb/sqloids})
+		 sqldb/oids})
 
 (check-modules '{bugjar bugjar/html bugjar/servlet})
 

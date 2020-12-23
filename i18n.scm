@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{texttools io/dtypeio io/xtypeio})
+(use-module '{texttools binio})
 
 (define s1
   "This is a \u0073imple \u{0073}entence, with a \146ew \U00000073pecial characters: \\ \? \' \&amp; \&middot;")

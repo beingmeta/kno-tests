@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{io/fileio io/byteio io/dtypeio io/xtypeio})
+(use-module '{binio})
 
 (define data-dir (get-component "data"))
 (define text-file (mkpath data-dir "testobj.text"))

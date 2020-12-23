@@ -50,7 +50,7 @@
 (errtest (within-module 'stringfmts (quotient~ zval 3)))
 (evaltest 5 (accessing-module 'stringfmts (quotient~ zval 3)))
 
-(evaltest #t (overlaps? (get-exports (get-module 'io/fileio)) 'open-output-file))
+(evaltest #t (overlaps? (get-exports (get-module 'fileio)) 'open-output-file))
 (evaltest #t (overlaps? (get-exports (get-module 'stringfmts))
 			'get%))
 

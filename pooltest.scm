@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{io/fileio logger kno/reflect varconfig})
+(use-module '{fileio logger kno/reflect varconfig})
 
 (config! 'CHECKDTSIZE #t)
 
