@@ -3,7 +3,8 @@
    checkurl codewalker couchdb dropbox ellipsize email fakezip fillin 
    findcycles getcontent gravatar hashstats histogram hostinfo i18n ice 
    mimeout oauth bugjar pump readcsv samplefns savecontent 
-   speling tinygis tracer trackrefs twilio updatefile whocalls})
+   speling tinygis tracer trackrefs twilio updatefile whocalls
+   batch})
 
 (check-modules '{aws aws/s3 aws/ses aws/simpledb aws/sqs aws/v4
 		 aws/associates aws/dynamodb})
@@ -15,6 +16,8 @@
 		 })
 
 (check-modules '{facebook facebook/fbcall facebook/fbml})
+
+(check-modules '{booktools/gutdb booktools/hathitrust booktools/isbn booktools/librarything booktools/openlibrary})
 
 (check-modules '{google google/drive})
 
