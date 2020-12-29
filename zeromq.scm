@@ -1,6 +1,6 @@
 (load "common.scm")
 
-(use-module '{zeromq crypto packetfns})
+(use-module '{zeromq crypto kno/packetfns})
 
 (define (main)
   (test-send/recv)
