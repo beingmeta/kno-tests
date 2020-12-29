@@ -2,7 +2,7 @@
 ;;; -*- Mode: Scheme; -*-
 
 (use-module '{bench/miscfns optimize logger 
-	      kno/reflect varconfig stringfmts})
+	      kno/reflect varconfig text/stringfmts})
 (config! 'optlevel 4)
 (config! 'optimize:keepsource #f)
 

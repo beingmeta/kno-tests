@@ -1,7 +1,7 @@
 #!./kno
 ;;; -*- Mode: Scheme; text-encoding: utf-8 -*-
 
-(use-module '{logger stringfmts optimize varconfig})
+(use-module '{logger text/stringfmts optimize varconfig})
 
 (define %loglevel %notice%)
 (varconfig! verbose %loglevel config:loglevel #f)

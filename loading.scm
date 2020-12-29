@@ -9,7 +9,7 @@
 
 (unless (has-suffix (config 'exe) "/knoc") (config! 'logloaderrs #f))
 
-(use-module '{stringfmts testcapi})
+(use-module '{text/stringfmts testcapi})
 
 (errtest (load-component "data/parsefail.scm"))
 (errtest (load-component "data/nosuchfile.scm"))

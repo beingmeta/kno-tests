@@ -1,5 +1,5 @@
 (check-modules
- '{opts hashfs rulesets meltcache curlcache saveopt signature cachequeue 
+ '{opts gpath/hashfs kno/rulesets kno/meltcache curlcache saveopt signature cachequeue 
    checkurl codewalker couchdb dropbox ellipsize email fakezip fillin 
    findcycles getcontent gravatar hashstats histogram hostinfo i18n ice 
    mimeout oauth bugjar pump readcsv samplefns savecontent 

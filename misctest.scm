@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{kno/reflect binio varconfig stringformats randobj})
+(use-module '{kno/reflect binio varconfig text/stringfmts bench/randobj})
 
 (optimization-leaks)
 
@@ -506,8 +506,8 @@
 
 ;;; Testing use-binding and %use-binding
 
-(define $num (get-binding 'stringfmts '$num))
-(define $num2 (importvar 'stringfmts '$num))
+(define $num (get-binding 'text/stringfmts '$num))
+(define $num2 (importvar 'text/stringfmts '$num))
 
 (evaltest "3" (stringout ($num 3)))
 (evaltest "186,000" (stringout ($num 186000)))

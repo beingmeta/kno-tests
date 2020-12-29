@@ -1,7 +1,7 @@
 #!./xrun ./knox
 ;;; -*- Mode: Scheme; -*-
 
-(use-module '{bench/miscfns optimize stringfmts})
+(use-module '{bench/miscfns optimize text/stringfmts})
 (config! 'optimize:keepsource #f)
 
 (optimize! 'bench/miscfns)

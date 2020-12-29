@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{texttools ezrecords bench/miscfns optimize stringfmts})
+(use-module '{texttools ezrecords bench/miscfns optimize text/stringfmts})
 (use-module '{kno/reflect kno/profile})
 
 (define swapf
@@ -127,7 +127,7 @@
 (applytest #f get-source (withenv #f (%env)))
 (applytest #f get-source #[x 3])
 (applytest #f get-source (with-sourcebase #f (lambda (x) x)))
-(applytest has-suffix "stringfmts.scm" get-source (get (get-module 'stringfmts) 'show%))
+(applytest has-suffix "stringfmts.scm" get-source (get (get-module 'text/stringfmts) 'show%))
 (applytest #f procedure-filename (elts nameless))
 (applytest 'err procedure-filename #"packet")
 (applytest 'err procedure-module #"packet")

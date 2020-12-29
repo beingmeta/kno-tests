@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{ezrecords kno/reflect stringfmts})
+(use-module '{ezrecords kno/reflect text/stringfmts})
 
 (define have-defmacro (get-module 'defmacro))
 
@@ -751,7 +751,7 @@
 (errtest (defimport bar))
 (errtest (defimport "foo" bar))
 (errtest (defimport foo 'nomodule))
-(errtest (defimport $num$ 'stringfmts))
+(errtest (defimport $num$ 'text/stringfmts))
 
 (define (test-docstrings x y)
   "This takes two arguments"
