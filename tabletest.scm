@@ -1,6 +1,6 @@
 (load-component "common.scm")
 
-(use-module '{randobj binio texttools})
+(use-module '{bench/randobj binio texttools})
 
 (define aggindex #f)
 (varconfig! aggindex aggindex config:boolean)

@@ -1,9 +1,10 @@
 (check-modules
  '{opts gpath/hashfs kno/rulesets kno/meltcache curlcache saveopt crypto/signature cachequeue 
-   net/checkurl codewalker apis/couchdb dropbox text/ellipsize net/email fakezip fillin 
-   findcycles getcontent gravatar hashstats histogram hostinfo i18n ice 
+   net/checkurl codewalker text/ellipsize net/email fakezip fillin 
+   findcycles getcontent hashstats histogram hostinfo i18n ice 
    net/mimeout net/oauth bugjar text/readcsv samplefns 
-   text/speling apis/tinygis trackrefs apis/twilio os/updatefile kno/whocalls
+   text/speling trackrefs os/updatefile kno/whocalls
+   apis/gravatar apis/twilio apis/couchdb apis/dropbox  apis/tinygis
    batch})
 
 (check-modules '{apis/aws apis/aws/s3 apis/aws/ses apis/aws/simpledb apis/aws/sqs apis/aws/v4
@@ -33,6 +34,3 @@
 (check-modules '{apis/twitter})
 
 (check-modules '{morph morph/en morph/es})
-
-
-
