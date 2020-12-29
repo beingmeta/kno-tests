@@ -1,9 +1,10 @@
-(check-modules '{condense defmacro defstruct dopool engine ezrecords fifo
-		 io/filestream gpath jsonout logctl logger mimetable
-		 mttools packetfns parsetime io/readfile
-		 stringfmts stringformats usedb varconfig})
+(check-modules '{defmacro defstruct dopool engine ezrecords fifo
+		 io/filestream gpath io/jsonout logctl logger net/mimetable
+		 kno/packetfns parsetime io/readfile
+		 text/stringfmts varconfig})
+(check-modules '{kno/condense})
 
-(check-modules '{bench kno/sessions kno/profiling kno/primdecls kno/threads})
+(check-modules '{bench kno/sessions kno/profiling kno/primdecls kno/mttools kno/threads})
 
 (check-modules '{knodb
 		 knodb/adjuncts knodb/branches knodb/countrefs

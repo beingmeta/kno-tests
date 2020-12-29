@@ -23,7 +23,7 @@
 (define started (elapsed-time))
 (load-component "libscm.scm")
 (load-component "stdlib.scm")
-(load-component "brico.scm")
+;; (load-component "brico.scm")
 (logwarn |Done| "After " (elapsed-time started) " seconds")
 
 (when (> (optimize/count-warnings) 0)
