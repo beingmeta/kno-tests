@@ -1,5 +1,5 @@
 (check-modules
- '{opts gpath/hashfs kno/rulesets kno/meltcache curlcache saveopt crypto/signature cachequeue 
+ '{opts hashfs kno/rulesets kno/meltcache curlcache saveopt crypto/signature cachequeue 
    net/checkurl codewalker text/ellipsize net/email fakezip fillin 
    findcycles getcontent hashstats histogram hostinfo i18n ice 
    net/mimeout net/oauth bugjar text/readcsv samplefns 
@@ -7,8 +7,8 @@
    apis/gravatar apis/twilio apis/couchdb apis/dropbox  apis/tinygis
    batch})
 
-(check-modules '{apis/aws apis/aws/s3 apis/aws/ses apis/aws/simpledb apis/aws/sqs apis/aws/v4
-		 apis/aws/associates apis/aws/dynamodb})
+(check-modules '{aws aws/s3 aws/ses aws/simpledb aws/sqs aws/v4
+		 aws/associates aws/dynamodb})
 
 (check-modules '{domutils domutils/index domutils/localize
 		 domutils/styles domutils/css domutils/cleanup
@@ -20,7 +20,7 @@
 
 (check-modules '{booktools/gutdb booktools/hathitrust booktools/isbn booktools/librarything booktools/openlibrary})
 
-(check-modules '{apis/google apis/google/drive})
+(check-modules '{google google/drive})
 
 (check-modules '{knodules knodules/drules
 		 knodules/html knodules/plaintext})
