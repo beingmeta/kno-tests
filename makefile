@@ -4,7 +4,7 @@
 
 MAKEFLAGS = -s
 export KNO_LIBSCM_DIR=../src/libscm/
-export KNO_LOADPATH=../src/brico/:../src/stdlib/:
+export KNO_LOADPATH=../src/brico/:../src/stdmods/:../src/webmods:../textmods
 export KNO_DLOADPATH=../lib/kno
 export LD_LIBRARY_PATH=../lib
 export DYLD_LIBRARY_PATH=../lib
@@ -22,7 +22,7 @@ MEMTEST_ENV	= MALLOC_CHECK_=3
 LEAKTEST_ENV	= 
 TESTSIZE	= 512
 SMALLTESTSIZE	= 64
-BASETESTCONFIG	= LOADPATH=../src/stdlib/
+BASETESTCONFIG	= LOADPATH=../src/stdmods/:../src/webmods/:../src/textmods/
 RUN		= ${TEST_ENV} ${TESTPROG}
 MEMTEST		= ${TEST_ENV} ${MEMTEST_ENV} ${MEMTESTER:-${TESTPROG}}
 LEAKTEST	= ${TEST_ENV} ${LEAKTEST_ENV} ${LEAKTESTER:-${TESTPROG}}
