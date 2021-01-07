@@ -4,7 +4,7 @@
 
 MAKEFLAGS = -s
 export KNO_LIBSCM_DIR=../src/libscm/
-export KNO_LOADPATH=../src/brico/:../src/stdmods/:../src/webmods:../textmods
+export KNO_LOADPATH=../src/brico/:../src/stdmods/:../src/webmods:../src/textmods
 export KNO_DLOADPATH=../lib/kno
 export LD_LIBRARY_PATH=../lib
 export DYLD_LIBRARY_PATH=../lib
@@ -482,64 +482,64 @@ indextests indexes: fileindexes hashindexes logindexes kindexes
 framedb:
 	@${header} "■■■■■■■■ Running frame/database tests, ${TESTBASE} ${TESTSIZE} ${RUNCONF}";
 	rm -rf ${TESTBASE}*.pool ${TESTBASE}*.index
-	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames init \
+	${RUN} ${KNOX} framedb.scm ${TESTBASE}frames init \
 		COUNT=${TESTSIZE} ${FRAMEDB_FILES} \
 		${RUNCONF};
-	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} ${RUNCONF};
-	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
-		 ${RUNCONF} CACHELEVEL=2;
-	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
-		 ${RUNCONF} CACHELEVEL=3;
-	@${header} "■■■■■■■■ Testing database creation with CACHELEVEL=2";
-	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames init COUNT=${TESTSIZE} 	\
-		${FRAMEDB_FILES} ${RUNCONF} CACHELEVEL=2;
-	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
-		 ${RUNCONF} CACHELEVEL=2;
-	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
-		 ${RUNCONF} CACHELEVEL=3;
+	# @${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} ${RUNCONF};
+	# @${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
+	# 	 ${RUNCONF} CACHELEVEL=2;
+	# @${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
+	# 	 ${RUNCONF} CACHELEVEL=3;
+	# @${header} "■■■■■■■■ Testing database creation with CACHELEVEL=2";
+	# @${RUN} ${KNOX} framedb.scm ${TESTBASE}frames init COUNT=${TESTSIZE} 	\
+	# 	${FRAMEDB_FILES} ${RUNCONF} CACHELEVEL=2;
+	# @${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
+	# 	 ${RUNCONF} CACHELEVEL=2;
+	# @${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
+	# 	 ${RUNCONF} CACHELEVEL=3;
 	@${header} "■■■■■■■■ Finished frame/database tests, ${TESTBASE} ${TESTSIZE} ${RUNCONF} ■■■■■■■■■■■■■■■■";
 
 framedb_base:
-	@make TESTBASE=testdb RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB40}" framedb
+	@make TESTBASE=testdb RUNCONF="${KPOOL} ${KINDEX} ${OFFB40}" framedb
 framedb_aggregate:
-	@make TESTBASE=agg RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB40} AGGINDEX=yes" framedb
+	@make TESTBASE=agg RUNCONF="${KPOOL} ${KINDEX} ${OFFB40} AGGINDEX=yes" framedb
 framedb_keyslot:
-	@make TESTBASE=slotindex RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB40} SEPINDEX=FILENAME" framedb
+	@make TESTBASE=slotindex RUNCONF="${KPOOL} ${KINDEX} ${OFFB40} SEPINDEX=FILENAME" framedb
 framedb_keyslots:
-	@make TESTBASE=slotindex RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB40} SEPINDEX=FILENAME SEPINDEX=IN-FILE^CONTEXT" framedb
+	@make TESTBASE=slotindex RUNCONF="${KPOOL} ${KINDEX} ${OFFB40} SEPINDEX=FILENAME SEPINDEX=IN-FILE^CONTEXT" framedb
 
-framedb_kpool32:
-	@make TESTBASE=tmpkpool32 RUNCONF="${KPOOL} ${HASHINDEX} ${OFFB32}" framedb
-framedb_kpool40:
-	@make TESTBASE=tmpkpool40 RUNCONF="${KPOOL} ${HASHINDEX} ${OFFB40}" framedb
-framedb_kpool64:
-	@make TESTBASE=tmpkpool64 RUNCONF="${KPOOL} ${HASHINDEX} ${OFFB64}" framedb
+# framedb_kpool32:
+# 	@make TESTBASE=tmpkpool32 RUNCONF="${KPOOL} ${HASHINDEX} ${OFFB32}" framedb
+# framedb_kpool40:
+# 	@make TESTBASE=tmpkpool40 RUNCONF="${KPOOL} ${HASHINDEX} ${OFFB40}" framedb
+# framedb_kpool64:
+# 	@make TESTBASE=tmpkpool64 RUNCONF="${KPOOL} ${HASHINDEX} ${OFFB64}" framedb
 
-framedb_bigpool32:
-	@make TESTBASE=tmpbigpool32 RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB32}" framedb
-framedb_bigpool40:
-	@make TESTBASE=tmpbigpool40 RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB40}" framedb
-framedb_bigpool64:
-	@make TESTBASE=tmpbigpool64 RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB64}" framedb
+# framedb_bigpool32:
+# 	@make TESTBASE=tmpbigpool32 RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB32}" framedb
+# framedb_bigpool40:
+# 	@make TESTBASE=tmpbigpool40 RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB40}" framedb
+# framedb_bigpool64:
+# 	@make TESTBASE=tmpbigpool64 RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB64}" framedb
 
 framedb_fileindex:
 	@make TESTBASE=tmpfileindex RUNCONF="${BIGPOOL} ${FILEINDEX} ${OFFB40}" framedb
 framedb_logindex:
 	@make TESTBASE=tmplogindex RUNCONF="${BIGPOOL} ${LOGINDEX} ${OFFB40}" framedb
-framedb_oidpool32:
-	@make TESTBASE=tmpoidpool32 RUNCONF="${OIDPOOL} ${HASHINDEX} ${OFFB32}" framedb
-framedb_oidpool40:
-	@make TESTBASE=tmpoidpool40 RUNCONF="${OIDPOOL} ${HASHINDEX} ${OFFB40}" framedb
-framedb_oidpool64:
-	@make TESTBASE=tmpoidpool64 RUNCONF="${OIDPOOL} ${HASHINDEX} ${OFFB64}" framedb
 framedb_consindex:
 	@make TESTBASE=tmpbigpool40cx RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB40} CONSINDEX=yes" framedb
+# framedb_oidpool32:
+# 	@make TESTBASE=tmpoidpool32 RUNCONF="${OIDPOOL} ${HASHINDEX} ${OFFB32}" framedb
+# framedb_oidpool40:
+# 	@make TESTBASE=tmpoidpool40 RUNCONF="${OIDPOOL} ${HASHINDEX} ${OFFB40}" framedb
+# framedb_oidpool64:
+# 	@make TESTBASE=tmpoidpool64 RUNCONF="${OIDPOOL} ${HASHINDEX} ${OFFB64}" framedb
 
-framedb_knodb40:
+framedb40:
 	@make TESTBASE=tmpknodb40 RUNCONF="${KPOOL} ${KINDEX} ${OFFB40}" framedb
-framedb_knodb64:
+framedb64:
 	@make TESTBASE=tmpknodb64 RUNCONF="${KPOOL} ${KINDEX} ${OFFB64}" framedb
-framedb_knodb32:
+framedb32:
 	@make TESTBASE=tmpknodb32 RUNCONF="${KPOOL} ${KINDEX} ${OFFB32}" framedb
 
 leveldbframes leveldbframedb:
@@ -547,12 +547,8 @@ leveldbframes leveldbframedb:
 rocksdbframes rocksdbframedb:
 	@make TESTBASE=rocksdb RUNCONF="POOLTYPE=rocksdb INDEXTYPE=rocksdb INDEXMOD=rocksdb POOLMOD=rocksdb" framedb
 
-framedb_knodb: framedb_knodb32 framedb_knodb40 framedb_knodb64
-
 framedbs: framedb_base \
-	framedb_bigpool32 framedb_bigpool40 framedb_bigpool64 \
-	framedb_kpool32 framedb_kpool40 framedb_kpool64 \
-	framedb_knodb32 framedb_knodb40 framedb_knodb64 \
+	framedb32 framedb40 framedb64 \
 	framedb_aggregate framedb_keyslot \
 	framedb_fileindex framedb_logindex \
 
