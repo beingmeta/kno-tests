@@ -22,7 +22,7 @@
 
 (define pooltype 'kpool)
 (varconfig! pooltype pooltype #t)
-(define indextype 'hashindex)
+(define indextype 'kindex)
 (varconfig! indextype indextype #t)
 
 (define (parser/roundtrip x)

@@ -6,7 +6,7 @@
 ;; (logctl! 'knodb/adjuncts %debug%)
 
 (define poolfile "flex.flexpool")
-(define pooltype 'bigpool)
+(define pooltype 'kpool)
 (define compression #f)
 (varconfig! poolfile poolfile)
 (varconfig! pooltype pooltype #t)
@@ -22,7 +22,7 @@
 		  prefix ,(strip-suffix poolfile ".flexpool")
 		  adjuncts #[cubed "cubed"]
 		  compression ,compression
-		  partition-type bigpool])
+		  partition-type kpool])
 	 (fp ((if existing open-pool make-pool) poolfile opts)))
     (set! testpool fp)
     (unless existing

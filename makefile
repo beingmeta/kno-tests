@@ -30,15 +30,12 @@ FRAMEDB_FILES	= r4rs.scm misctest.scm sequences.scm choices.scm framedb.scm
 TESTBASE	= tmptest
 TESTFILE	= ${TESTBASE}.file
 KNOX		= ./knox
-OIDPOOL		= POOLTYPE=oidpool
-BIGPOOL		= POOLTYPE=bigpool
 KPOOL		= POOLTYPE=kpool
 SNAPPY		= COMPRESSION=snappy
 ZPOOL		= COMPRESSION=zlib
 ZSTD	        = COMPRESSION=zstd
 FILEPOOL	= POOLTYPE=filepool
 FILEINDEX	= INDEXTYPE=fileindex
-HASHINDEX	= INDEXTYPE=hashindex
 KINDEX	        = INDEXTYPE=kindex
 LOGINDEX	= INDEXTYPE=logindex
 OFFB40		= OFFTYPE=B40
@@ -354,29 +351,6 @@ pooltest:
 filepooltest:
 	@make TESTBASE=filepool RUNCONF="${FILEPOOL} ${RUNCONF}" pooltest
 
-oidpooltest:
-	@make TESTBASE=oidpool RUNCONF="${OIDPOOL} ${RUNCONF}" pooltest
-oidpool32test:
-	@make TESTBASE=oidpool32 RUNCONF="${OIDPOOL} ${OFFB32} ${RUNCONF}" pooltest
-oidpool64test:
-	@make TESTBASE=oidpool64 RUNCONF="${OIDPOOL} ${OFFB64} ${RUNCONF}" pooltest
-
-bigpooltest:
-	@make TESTBASE=bigpool RUNCONF="${BIGPOOL} ${RUNCONF}" pooltest
-bigpool32test:
-	@make TESTBASE=bigpool32 RUNCONF="${BIGPOOL} ${OFFB32} ${RUNCONF}" pooltest
-bigpool64test:
-	@make TESTBASE=bigpool64 RUNCONF="${BIGPOOL} ${OFFB64} ${RUNCONF}" pooltest
-bigpoolsnappytest:
-	@make TESTBASE=bigpoolsnappy RUNCONF="${BIGPOOL} ${SNAPPY} ${RUNCONF}" pooltest
-bigpoolzlibtest:
-	@make TESTBASE=bigpoolzlib RUNCONF="${BIGPOOL} ${ZPOOL} ${RUNCONF}" pooltest
-bigpoolzstdtest:
-	@make TESTBASE=bigpoolzstd RUNCONF="${BIGPOOL} ${ZSTD} ${RUNCONF}" pooltest
-# This doesn't do any slotcoding to check those code paths
-bigpooltest_nx:
-	@make TESTBASE=bigpool_nx RUNCONF="SLOTCODES=#f ${BIGPOOL} ${RUNCONF}" pooltest
-
 kpooltest:
 	@make TESTBASE=kpool RUNCONF="${KPOOL} ${RUNCONF}" pooltest
 kpool32test:
@@ -401,10 +375,6 @@ rocksdbpools rocksdbpooltests:
 
 kpools kpooltests: kpooltest kpool32test kpool64test kpoolztest \
         kpoolsnappytest kpoolzstdtest
-bigpools bigpooltests: bigpooltest bigpool32test bigpool64test \
-        bigpooltest_nx bigpoolsnappytest bigpoolzlibtest \
-        bigpoolzstdtest
-oidpools oidpooltests: oidpooltest oidpool32test oidpool64test
 
 flexpools flexpooltests:
 	@${header} "■■■■■■■■ Running flexpool tests, ${TESTBASE} ${TESTSIZE} ${RUNCONF}";
@@ -412,7 +382,7 @@ flexpools flexpooltests:
 	@${RUN} ${KNOX} flexpooltests.scm flex${TESTBASE}.flexpool ${RUNCONF};
 	@${RUN} ${KNOX} flexpooltests.scm flex${TESTBASE}.flexpool ${RUNCONF};
 
-pooltests pools: filepooltest bigpooltests flexpooltests
+pooltests pools: filepooltest flexpooltests
 
 .PHONY: pooltests pool
 
@@ -445,15 +415,6 @@ leveldbindexes leveldbindex:
 rocksdbindexes rocksdbindex:
 	@make TESTBASE=temprocksdb.index RUNCONF="INDEXTYPE=rocksdb INDEXMOD=rocksdb" indextest
 
-hashindex32:
-	@make TESTBASE=tmphash32.index RUNCONF="INDEXTYPE=hashindex OFFTYPE=B32" indextest
-hashindex40:
-	@make TESTBASE=tmphash40.index RUNCONF="INDEXTYPE=hashindex OFFTYPE=B40" indextest
-hashindex64:
-	@make TESTBASE=tmphash64.index RUNCONF="INDEXTYPE=hashindex OFFTYPE=B64" indextest
-hashindex40x:
-	@make TESTBASE=tmphash40x.index RUNCONF="INDEXTYPE=hashindex OFFTYPE=B40 SLOTCODES=yes OIDCODES=yes" indextest
-
 kindex32:
 	@make TESTBASE=tmpkno32.index RUNCONF="INDEXTYPE=kindex OFFTYPE=B32" indextest
 kindex40:
@@ -464,18 +425,17 @@ kindex40x:
 	@make TESTBASE=tmpkno40x.index RUNCONF="INDEXTYPE=kindex OFFTYPE=B40 SLOTCODES=yes OIDCODES=yes" indextest
 
 aggindex:
-	@make TESTBASE=aggindex.index RUNCONF="INDEXTYPE=hashindex OFFTYPE=B40 AGGINDEX=yes" indextest
+	@make TESTBASE=aggindex.index RUNCONF="INDEXTYPE=kindex OFFTYPE=B40 AGGINDEX=yes" indextest
 aggindex_consed:
-	@make TESTBASE=aggindex.index RUNCONF="INDEXTYPE=hashindex OFFTYPE=B40 CONSINDEX=yes AGGINDEX=yes" indextest
+	@make TESTBASE=aggindex.index RUNCONF="INDEXTYPE=kindex OFFTYPE=B40 CONSINDEX=yes AGGINDEX=yes" indextest
 aggindexes: aggindex aggindex_consed
 
 
-hashindexes hashindex: hashindex32 hashindex40 hashindex40x hashindex64
 kindexes kindex: kindex32 kindex40 kindex40x kindex64
 
-indextests indexes: fileindexes hashindexes logindexes kindexes
+indextests indexes: fileindexes logindexes kindexes
 
-.PHONY: indexes indextests fileindexes hashindexes logindexes aggindexes kindexes
+.PHONY: indexes indextests fileindexes logindexes aggindexes kindexes
 
 # Database/frames test
 
@@ -508,32 +468,12 @@ framedb_keyslot:
 framedb_keyslots:
 	@make TESTBASE=slotindex RUNCONF="${KPOOL} ${KINDEX} ${OFFB40} SEPINDEX=FILENAME SEPINDEX=IN-FILE^CONTEXT" framedb
 
-# framedb_kpool32:
-# 	@make TESTBASE=tmpkpool32 RUNCONF="${KPOOL} ${HASHINDEX} ${OFFB32}" framedb
-# framedb_kpool40:
-# 	@make TESTBASE=tmpkpool40 RUNCONF="${KPOOL} ${HASHINDEX} ${OFFB40}" framedb
-# framedb_kpool64:
-# 	@make TESTBASE=tmpkpool64 RUNCONF="${KPOOL} ${HASHINDEX} ${OFFB64}" framedb
-
-# framedb_bigpool32:
-# 	@make TESTBASE=tmpbigpool32 RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB32}" framedb
-# framedb_bigpool40:
-# 	@make TESTBASE=tmpbigpool40 RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB40}" framedb
-# framedb_bigpool64:
-# 	@make TESTBASE=tmpbigpool64 RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB64}" framedb
-
 framedb_fileindex:
-	@make TESTBASE=tmpfileindex RUNCONF="${BIGPOOL} ${FILEINDEX} ${OFFB40}" framedb
+	@make TESTBASE=tmpfileindex RUNCONF="${KPOOL} ${FILEINDEX} ${OFFB40}" framedb
 framedb_logindex:
-	@make TESTBASE=tmplogindex RUNCONF="${BIGPOOL} ${LOGINDEX} ${OFFB40}" framedb
+	@make TESTBASE=tmplogindex RUNCONF="${KPOOL} ${LOGINDEX} ${OFFB40}" framedb
 framedb_consindex:
-	@make TESTBASE=tmpbigpool40cx RUNCONF="${BIGPOOL} ${HASHINDEX} ${OFFB40} CONSINDEX=yes" framedb
-# framedb_oidpool32:
-# 	@make TESTBASE=tmpoidpool32 RUNCONF="${OIDPOOL} ${HASHINDEX} ${OFFB32}" framedb
-# framedb_oidpool40:
-# 	@make TESTBASE=tmpoidpool40 RUNCONF="${OIDPOOL} ${HASHINDEX} ${OFFB40}" framedb
-# framedb_oidpool64:
-# 	@make TESTBASE=tmpoidpool64 RUNCONF="${OIDPOOL} ${HASHINDEX} ${OFFB64}" framedb
+	@make TESTBASE=tmpkpool40cx RUNCONF="${KPOOL} ${KINDEX} ${OFFB40} CONSINDEX=yes" framedb
 
 framedb40:
 	@make TESTBASE=tmpknodb40 RUNCONF="${KPOOL} ${KINDEX} ${OFFB40}" framedb
@@ -590,81 +530,6 @@ chainscripts: execscripts
 	@if test -f chaintest.failed; then \
 	  echo "FAILURE: chaintest.scm failed, log in chaintest.log"; fi
 	@${header} "■■■■■■■■ Done testing scripts which call CHAIN"
-
-knotask_normal:
-	@${header} "■■■■■■■■ Testing knotask execution success and cleanliness"
-	@rm -f _countup.log _countup.err _countup.done
-	@rm -f  _countup.finished _countup.died _countup.pid batchscripts.log
-	@${TEST_ENV} ../dbg/knotask countup.scm "_countup.finished" 10 1 QUIET=yes LOGLEVEL=3;
-	@sleep 3
-	@if (test ! -f _countup.pid); then \
-	   ./batchfail knotask _countup.pid NOT CREATED; fi;
-	@sleep 12;
-	@${header} This was written by knotask itself
-	@if (test ! -f _countup.done); then \
-	   ./batchfail knotask _countup.done MISSING; fi;
-	@${header} This was written by the script
-	@if (test ! -f _countup.finished); then \
-           ./batchfail knotask _countup.finished MISSING; fi;
-	@if (test ! -f _countup.err); then \
-	    ./batchfail knotask _countup.err MISSING; fi;
-	@if (test ! -f _countup.log); then \
-	   ./batchfail knotask _countup.log MISSING; fi;
-	@${header} These should have been deleted on successful exit
-	@if (test -f _countup.died); then \
-	   ./batchfail knotask _countup.died CREATED; fi;
-	@if (test -f _countup.pid); then \
-	   ./batchfail knotask _countup.pid STILL EXISTS; fi;
-	@if test -f batchscripts.failed; then 	\
-	  rm batchscripts.failed; 		\
-	else echo "SUCCESS: batchscripts/normal test succeeded"; fi
-	@${header} "■■■■■■■■ "Done with knotask success test""
-
-knotask_error: knotask_normal
-	@${header} "■■■■■■■■ "Starting knotask error test""
-	@${TEST_ENV} ../dbg/knotask countup.scm ERROR=yes "_countup.finished" 10 1 QUIET=yes LOGLEVEL=3;
-	@sleep 12;
-	@${header} This should have been deleted by the watch process
-	@if (test -f _countup.pid); then \
-	   ./batchfail knotask/errtest _countup.pid still exists; fi;
-	@if (test -f _countup.done); then \
-	   ./batchfail knotask/errtest _countup.done created; fi
-	@${header} This should have been created at exit
-	@if (test ! -f _countup.died); then 		\
-	   ./batchfail knotask/errtest countup.died not created; fi
-	@rm -f _countup.done _countup.finished _countup.died
-	@if test -f batchscripts.failed; then 	\
-	  rm batchscripts.failed; 		\
-	else echo "SUCCESS: batchscripts/onerror test succeeded"; fi
-	@${header} "■■■■■■■■ "Done with knotask error test""
-
-knotask_signal: knotask_error
-	@${header} "■■■■■■■■ "Starting knotask kill test""
-	@${TEST_ENV} ../dbg/knotask countup.scm "_countup.killed" 10 1 QUIET=yes LOGLEVEL=3;
-	@sleep 3;
-	@kill -9 `cat _countup.pid`; sleep 12
-	@${header} This should have been deleted by the watch process
-	@if (test -f _countup.pid); then \
-	   ./batchfail knotask/killtest _countup.pid still exists; fi;
-	@${header} This should have been deleted by the watch process
-	@if (test -f _countup.done); then \
-	   ./batchfail knotask/killtest _countup.done exists; fi;
-	@${header} This should have been created at exit by the watch process
-	@if (test ! -f _countup.died); then \
-	   ./batchfail knotask/killtest _countup.died missing; fi;
-	@if test -f batchscripts.failed; then 	\
-	  rm batchscripts.failed; 		\
-	else echo "SUCCESS: batchscripts/onkill test succeeded"; fi;
-	@echo "RELAX: the 'Critical (Job terminated)' warning above was expected, so don't worry about it";
-	@${header} "■■■■■■■■ "Done with knotask kill test""
-
-batchscripts: knotask_signal
-
-chained_batchscripts:
-	@${header} "■■■■■■■■ Testing batch scripts which call CHAIN"
-	@rm -f _chaintest.*
-	@${TEST_ENV} ../dbg/knotask chaintest.scm
-	@${header} "■■■■■■■■ Done testing batch scripts which call CHAIN"
 
 pipes:
 	@${RUN} ${KNOX} reverse_pipe.scm reversed.text < data/alphabet.text;
@@ -856,11 +721,6 @@ index_leaktests:
 fileindex_leaktests:
 	@${header} "■■■■■■■■ Running leak tests on indexes and index drivers"
 	make TESTPROG="${LEAKTESTER}" TEST_ENV="${LEAKTEST_ENV}" RUNCONF="${LEAKCONF}" TESTSIZE="${SMALLTESTSIZE}" fileindexes
-	@${header} "■■■■■■■■ Finished leak tests on indexes and index drivers"
-
-hashindex_leaktests:
-	@${header} "■■■■■■■■ Running leak tests on indexes and index drivers"
-	make TESTPROG="${LEAKTESTER}" TEST_ENV="${LEAKTEST_ENV}" RUNCONF="${LEAKCONF}" TESTSIZE="${SMALLTESTSIZE}" hashindexes
 	@${header} "■■■■■■■■ Finished leak tests on indexes and index drivers"
 
 framesdbs_leaktest:
