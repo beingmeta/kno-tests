@@ -5,7 +5,7 @@ export KNO_INIT_DLOADPATH
 KNO_INIT_LOADPATH=@abs_top_srcdir@/src/stdmods:@abs_top_srcdir@/src/webmods:@abs_top_srcdir@/src/textmods:@default_module_path@
 export KNO_INIT_LOADPATH
 export KNO_INIT_SAFELOADPATH
-KNO_LOADPATH=../src/stdlib/:
+KNO_LOADPATH=
 export KNO_LOADPATH
 KNO_DLOADPATH=../lib/kno:
 export KNO_DLOADPATH
