@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{jwt crypto pem})
+(use-module '{json/jwt crypto crypto/pem})
 
 (config! 'hexpacket #t)
 

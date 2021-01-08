@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{binio binio})
+(use-module '{binio})
 
 (define sample-file (get-component "data/sample.dtype"))
 
