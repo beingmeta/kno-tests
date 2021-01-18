@@ -414,8 +414,8 @@
 
 (applytester #t contains? "foo" "foo")
 (applytester #f contains? "bar" "foo")
-(applytester #f contains? {} "foo")
-(applytester #f contains? {} "foo")
+(applytester #t contains? {} "foo")
+(applytester #t contains? {} "foo")
 (applytester #t contains? "foo" {"foo" "bar" "baz"})
 (applytester #f contains?  {"foo" "bar" "baz"} "foo")
 (applytester #f contains?  {"foo" "bar" "baz"} {"foo" "bar"})
