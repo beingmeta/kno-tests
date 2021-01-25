@@ -405,6 +405,7 @@ fileindexes fileindex:
 
 logindexes logindex:
 	@make TESTBASE=logindex.index RUNCONF="INDEXTYPE=logindex" indextest
+	@make TESTBASE=logindex.index RUNCONF="INDEXTYPE=logindex CONSINDEX=yes" indextest
 
 typeindexes typeindex:
 	@make TESTBASE=temptypekeys.index RUNCONF="INDEXTYPE=typeindex INDEXMOD=knodb/typeindex" indextest
@@ -423,6 +424,9 @@ kindex64:
 	@make TESTBASE=tmpkno64.index RUNCONF="INDEXTYPE=kindex OFFTYPE=B64" indextest
 kindex40x:
 	@make TESTBASE=tmpkno40x.index RUNCONF="INDEXTYPE=kindex OFFTYPE=B40 SLOTCODES=yes OIDCODES=yes" indextest
+
+hindex40:
+	@make TESTBASE=tmpknoh40.index RUNCONF="INDEXTYPE=hashindex OFFTYPE=B40" indextest
 
 aggindex:
 	@make TESTBASE=aggindex.index RUNCONF="INDEXTYPE=kindex OFFTYPE=B40 AGGINDEX=yes" indextest
