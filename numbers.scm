@@ -119,7 +119,8 @@
 (applytest inexact? - 100 15.0 25 onebig)
 (applytest inexact? random 200.0)
 (applytest exact? random (* 1024 1024 4))
-(applytest exact? random (* 1024 1024 1024 64))
+(when fix61
+  (applytest exact? random (* 1024 1024 1024 64)))
 
 (applytest '{(420 . 10) (422 . 2) (425 . 5)} scalerep 423 {10 5 2})
 (applytest '(4230 . -10) scalerep 423.0 -10)

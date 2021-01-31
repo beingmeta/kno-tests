@@ -11,7 +11,7 @@
 (define ipi (ffi/proc "ffitest_ipi" #f 'long 'int 'int))
 (define sps (ffi/proc "ffitest_sps" #f 'int 'short 'short))
 (define fpf (ffi/proc "ffitest_fpf" #f 'double 'float 'float))
-(define strlen (ffi/proc "ffitest_strlen" #f 'long 'string))
+(define strlen (ffi/proc "ffitest_strlen" #f 'size_t 'string))
 (define chr (ffi/proc "ffitest_chr" #f 'char 'string 'int))
 
 (applytest 9 ipi 3 6)

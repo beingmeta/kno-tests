@@ -17,6 +17,8 @@
       "\t" (doseq (arg (config 'argv)) (printout " " arg)))))
 (config! 'atexit save-elapsed-atexit)
 
+(define fix61 (> (config 'maxfix) (* 256 256 256 256)))
+
 (config! 'log:threadid #t)
 (config! 'dload:trace #t)
 
