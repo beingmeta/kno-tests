@@ -1,7 +1,7 @@
 (check-modules
  '{opts hashfs kno/rulesets kno/meltcache curlcache saveopt crypto/signature cachequeue 
    net/checkurl codewalker text/ellipsize net/email fakezip fillin 
-   findcycles getcontent hashstats histogram hostinfo i18n ice 
+   findcycles hashstats histogram hostinfo i18n ice 
    net/mimeout net/oauth bugjar text/readcsv samplefns 
    text/speling trackrefs os/updatefile kno/whocalls
    apis/gravatar apis/twilio apis/couchdb apis/dropbox  apis/tinygis

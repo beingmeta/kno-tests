@@ -1,6 +1,6 @@
 (check-modules '{defmacro defstruct dopool engine ezrecords fifo
 		 io/filestream gpath json/export logctl logger net/mimetable
-		 kno/packetfns text/parsetime io/readfile
+		 kno/packetfns text/parsetime io/readfile io/getcontent
 		 text/stringfmts varconfig})
 (check-modules '{kno/condense})
 
