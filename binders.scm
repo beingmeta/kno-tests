@@ -72,14 +72,9 @@
 (define (bad-fn-6 (x))
   
   x)
-(applytest 'err (lambda ((x)) (bind-default!)))
-(applytest 'err (lambda ((x)) (bind-default! x)))
-(applytest 'err (lambda ((x)) (bind-default! x (error 'justbecause))))
-(applytest 'err (lambda ((x)) 
-		  (let ((y 3))
-		    (bind-default! x y))))
-
-
+(applytest 'err (lambda ((x)) (default!)))
+(applytest 'err (lambda ((x)) (default! x)))
+(applytest 'err (lambda ((x)) (default! x (error 'justbecause))))
 
 (errtest (let ((x 3)) (defimport $count 'text/stringfmts)))
 (errtest (defimport $count-chocula 'text/stringfmts))
