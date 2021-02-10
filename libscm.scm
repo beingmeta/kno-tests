@@ -10,7 +10,7 @@
 		 knodb/adjuncts knodb/branches knodb/countrefs
 		 knodb/filenames 
 		 knodb/flexindex knodb/flexpool
-		 knodb/hashindexes knodb/indexes knodb/kindexes
+		 knodb/hashindexes knodb/indexes
 		 knodb/kb knodb/registry knodb/typeindex
 		 ;; Kind of legacy
 		 knodb/slotindex knodb/splitpool
