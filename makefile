@@ -210,7 +210,7 @@ configs:
 	@${header} "■■■■ Completed config system tests ${RUNCONF}"
 appenv:
 	@${RUN} ${KNOX} TRACECONFIG=yes TRACELOAD=yes CONFIG=data/appenv.cfg \
-		APPMODS=logctl APPMODS=gpath\;parsetime ${RUNCONF}
+		APPMODS=logctl APPMODS=gpath\;text/parsetime ${RUNCONF}
 	@ BIZZARO=yes ${RUN} ${KNOX} CONFIG:TRACE=yes LOAD:TRACE=yes APPMODS=nomagic ${RUNCONF}
 	@ BIZZARO=yes ${RUN} ${KNOX} TRACECONFIG=yes TRACELOAD=yes APPLOAD=data/nomagic.scm ${RUNCONF}
 	@ BIZZARO=yes ${RUN} ${KNOX} CONFIG:TRACE=yes LOAD:TRACE=yes "APPMODS=stringfmts;33;88" ${RUNCONF}

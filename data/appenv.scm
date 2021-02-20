@@ -19,7 +19,7 @@
 (define multiply-file (get-component "multiply.scm"))
 
 (define (doit) 
-  (config! 'appmods "logctl;bench/miscfns;bench/miscmisc")
+  (config! 'appmods "logctl;bench/miscfns;bench/miscfns")
   (errtest (config! 'appmods #"packetin"))
   ;;(errtest (config! 'appmods '(#"packetin")))
   ;;(errtest (config! 'appload '(#"packetin")))
