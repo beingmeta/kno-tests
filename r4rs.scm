@@ -43,8 +43,6 @@
 
 (load-component "common.scm")
 
-(optimization-leaks)
-
 (define cur-section '())(define errs '())
 (define SECTION (lambda args
 		  (display "SECTION") (write args) (newline)

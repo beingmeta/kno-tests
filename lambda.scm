@@ -3,7 +3,9 @@
 (load-component "common.scm")
 
 (use-module '{kno/reflect text/stringfmts optimize})
-(optimize! 'text/stringfmts)
+
+(when (config 'testoptimized) (optimize! 'text/stringfmts))
+
 ;; TODO: This leaks for some reason. Find it out.
 ;;(reoptimize! 'text/stringfmts)
 

@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{texttools ezrecords bench/miscfns optimize text/stringfmts})
+(use-module '{texttools ezrecords bench/miscfns optimize stringfmts})
 (use-module '{kno/reflect kno/profile})
 
 (define swapf
@@ -70,14 +70,14 @@
 (evaltest 'void (set-procedure-tailable! arity-test #t))
 (errtest (set-procedure-tailable! #"packet" #f))
 
-(applytester pair? lambda-start arity-test2)
+(applytester pair? lambda-entry arity-test2)
 (errtest (procedure-tailable? if))
 (errtest (procedure-tailable? "three"))
 
 (applytest 'define car (lambda-source arity-test2))
 (errtest (applytest 'define car lambda-source arity-test2))
 (optimize! arity-test2)
-(applytester pair? lambda-start arity-test2)
+(applytester pair? lambda-entry arity-test2)
 
 (applytest 'err lambda-args "#packet")
 (applytest 'err lambda-env "#packet")
@@ -96,8 +96,8 @@
 (set-lambda-body! add1 '((+ 3 x)))
 (applytest 5 add1 2)
 
-(errtest (lambda-start car))
-(errtest (lambda-start "string"))
+(errtest (lambda-entry car))
+(errtest (lambda-entry "string"))
 (errtest (lambda-source car))
 (errtest (lambda-source "string"))
 (errtest (lambda-body car))

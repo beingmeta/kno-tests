@@ -103,34 +103,34 @@ static-tests: schemetests optscheme loadmods optmods zipmods slotmaps tables poo
 schemetests: r4rs choices sequences numbers regex xtypes compounds binio requests \
 	exceptions breaks errfns lambda tail conditionals iterators binders \
 	reflect hashsets eval loading modules quasiquote promises ffi configs opts appenv \
-	picktest cachecall texttools webtools timefns sysprims startup stringprims \
+	picktest cachecall texttools webtools timeprims sysprims startup stringprims \
 	i18n misc gctests gcoverflow profiler sqlite tail compress crypto \
 	fileprims xml
-optscheme optschemetests: schemetests
+optscheme optschemetests:
 	@${header} "■■■■■■■■ Running optimized scheme tests ${RUNCONF}"
 	make RUNCONF="TESTOPTIMIZED=yes ${RUNCONF}" \
 	  r4rs choices sequences misctest configs reflect eval lambda tail \
-	  exceptions picktest cachecall timefns sysprims compounds i18n fileprims \
+	  exceptions picktest cachecall timeprims sysprims compounds i18n fileprims \
 	  numbers regex xml texttools eval binders conditionals errfns \
-          requests sysprims timefns gctests crypto gcoverflow
+          requests gctests crypto gcoverflow
 	@${header} "■■■■■■■■ Completed optimized scheme tests ${RUNCONF}"
 ziptest: libscm.zip
 	@${header} "■■■■■■■■ Running scheme tests with zip sources ${RUNCONF}"
 	make RUNCONF="LIBSCM=libscm.zip ${RUNCONF}" \
 	  r4rs choices sequences misctest configs reflect eval lambda tail \
-	  exceptions picktest cachecall timefns sysprims compounds i18n fileprims \
+	  exceptions picktest cachecall timeprims sysprims compounds i18n fileprims \
 	  numbers regex xml texttools eval binders conditionals errfns \
-          requests sysprims timefns gctests crypto gcoverflow
+          requests gctests crypto gcoverflow
 	make RUNCONF="LIBSCM=libscm.zip TESTOPTIMIZED=yes ${RUNCONF}" \
 	  r4rs choices sequences misctest configs reflect eval lambda tail \
-	  exceptions picktest cachecall timefns sysprims compounds i18n fileprims \
+	  exceptions picktest cachecall timeprims sysprims compounds i18n fileprims \
 	  numbers regex xml texttools eval binders conditionals errfns \
-          requests sysprims timefns gctests crypto gcoverflow
+          requests gctests crypto gcoverflow
 	@${header} "■■■■■■■■ Completed optimized scheme tests ${RUNCONF}"
 libscm.zip: ../src/libscm/*.scm ../src/libscm/*/*.scm
 	cd ../src/libscm; zip -ry ../tests/libscm.zip *
 
-core scheme: optschemetests
+core scheme: schemetests optschemetests threads slotmaps
 
 loadmods load_modules:
 	@${header} "■■■■■■■■ Testing default module loads ${RUNCONF}"
@@ -259,9 +259,9 @@ webtools:
 stringprims:
 	@${RUN} ${KNOX} stringprims.scm ${RUNCONF}
 	@${header} "■■■■ Completed stringprims tests ${RUNCONF}"
-timefns:
-	@${RUN} ${KNOX} timefns.scm ${RUNCONF}
-	@${header} "■■■■ Completed timefns tests ${RUNCONF}"
+timeprims timefns:
+	@${RUN} ${KNOX} timeprims.scm ${RUNCONF}
+	@${header} "■■■■ Completed timeprims tests ${RUNCONF}"
 sysprims:
 	@${RUN} ${KNOX} sysprims.scm ${RUNCONF}
 	@${header} "■■■■ Completed sysprims tests ${RUNCONF}"
@@ -449,18 +449,13 @@ framedb:
 	${RUN} ${KNOX} framedb.scm ${TESTBASE}frames init \
 		COUNT=${TESTSIZE} ${FRAMEDB_FILES} \
 		${RUNCONF};
-	# @${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} ${RUNCONF};
-	# @${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
-	# 	 ${RUNCONF} CACHELEVEL=2;
-	# @${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
-	# 	 ${RUNCONF} CACHELEVEL=3;
-	# @${header} "■■■■■■■■ Testing database creation with CACHELEVEL=2";
-	# @${RUN} ${KNOX} framedb.scm ${TESTBASE}frames init COUNT=${TESTSIZE} 	\
-	# 	${FRAMEDB_FILES} ${RUNCONF} CACHELEVEL=2;
-	# @${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
-	# 	 ${RUNCONF} CACHELEVEL=2;
-	# @${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} \
-	# 	 ${RUNCONF} CACHELEVEL=3;
+	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} ${RUNCONF};
+	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} ${RUNCONF} CACHELEVEL=2;
+	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} ${RUNCONF} CACHELEVEL=3;
+	@${header} "■■■■■■■■ Testing database creation with CACHELEVEL=2";
+	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames init COUNT=${TESTSIZE} ${FRAMEDB_FILES} ${RUNCONF} CACHELEVEL=2;
+	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} ${RUNCONF} CACHELEVEL=2;
+	@${RUN} ${KNOX} framedb.scm ${TESTBASE}frames COUNT=${TESTSIZE} ${RUNCONF} CACHELEVEL=3;
 	@${header} "■■■■■■■■ Finished frame/database tests, ${TESTBASE} ${TESTSIZE} ${RUNCONF} ■■■■■■■■■■■■■■■■";
 
 framedb_base:

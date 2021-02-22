@@ -4,7 +4,9 @@
 		 text/stringfmts varconfig})
 (check-modules '{kno/condense})
 
-(check-modules '{bench kno/sessions kno/profiling kno/primdecls kno/mttools kno/threads})
+(check-modules 'bench)
+
+(check-modules '{kno/sessions kno/profiling kno/primdecls kno/mttools kno/threads})
 
 (check-modules '{knodb
 		 knodb/adjuncts knodb/branches knodb/countrefs

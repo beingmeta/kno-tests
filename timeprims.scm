@@ -156,7 +156,14 @@
   (applytest flonum? difftime moment)
   (applytest flonum? difftime (elapsed-time) moment)
   (applytest bday parser/roundtrip bday)
-  ;; OS dependent?
+  (applytest number? get now 'year)
+  (applytest number? get now 'month)
+  (applytest number? get now 'date)
+  (applytest number? get now 'hours)
+  (applytest number? get now 'minutes)
+  (applytest number? get now 'seconds)
+  (applytest number? get now 'milliseconds)
+  ;; This is OS dependent because it uses system defined conversions
   ;; (applytest "Mon 03 Dec 1979 03:15:00 AM EST" get bday 'string)
   (applytest "3Dec1979 03:15AM" get bday 'short)
   (applytest 1979 get bday 'year)
@@ -169,9 +176,9 @@
   (applytest -18000 get bday 'tzoff)
   (applytest 0 get bday 'dstoff)
   (applytest -18000 get bday 'gmtoff)
-  (applytest 0 get bday 'milliseconds)
-  (applytest 0 get bday 'microseconds)
-  (applytest 0 get bday 'nanoseconds)
+  (applytest {} get bday 'milliseconds)
+  (applytest {} get bday 'microseconds)
+  (applytest {} get bday 'nanoseconds)
   (applytest 313056900 get bday 'tick)
   (applytest 313056900 get bday '%tick)
   (applytest 3.130569e+08 get bday 'xtick)
@@ -202,20 +209,25 @@
   (applytest 'mon get bday 'dowid)
   (applytest 'dec get bday 'monthid))
   
+;;; MKTIME
+
+(applytest 1985 get (mktime 'year 1985 'month 12 'date 25) 'year)
+(applytest 1985 get (mktime 'year 85 'month 12 'date 25) 'year)
+
 ;;; Precision tests
 
-(define *precisions* #(year month date hour minute second millisecond 
-		       microsecond)) ;;  nanoseconds picoseconds femtoseconds
-#|
+(define *precisions* #(year month date hours minutes seconds milliseconds
+		       microseconds)) ;;  nanoseconds picoseconds femtoseconds
+
 (doseq (precision *precisions*)
   (applytest precision get (timestamp precision) 'precision))
+
 (doseq (precision *precisions* i)
   (let ((time (timestamp precision)))
     (applytest number? get time precision)
     (doseq (valid (slice *precisions* 0 i))
       (applytest number? get time valid))
-    (doseq (invalid (slice *precisions* i))
-      (applytest {} get time valid))))
-|#
+    (doseq (invalid (slice *precisions* (1+ i)))
+      (applytest {} get time invalid))))
 
 (message "TIMEFNS tests successfuly completed")

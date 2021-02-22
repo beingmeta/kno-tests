@@ -258,9 +258,20 @@
 
 (applytester 12 reduce-choice + {3 4 5 5 4})
 (applytester 12 reduce-choice + {"3" "4" "5"} 0 string->number)
+(applytester 12 reduce-choice + {"3" "4" "5"} [start 0 keyfn string->number])
+(applytester 12 reduce-choice + {"3" "4" "5"} [start 0] string->number)
 (applytester 12 reduce-choice + {"3" "4" "5" "5"} 0 string->number)
 (applytester 17 reduce-choice + {"3" "4" "5" "+5"} 0 string->number)
 (applytester 'err reduce-choice + {"3" "4" "5" "+5"} 0 #"packet")
+
+(define (dosquare x (r))
+  (set! r (picknums x))
+  (* r r))
+
+(applytester 12 reduce-choice + {"3" 3 "4" 4 "5" 5} [start 0 selector #number_type])
+(applytester 50 reduce-choice + {"3" 3 "4" 4 "5" 5} [keyfn dosquare])
+(applytester 51 reduce-choice + {"3" 3 "4" 4 "5" 5} [start 1 keyfn dosquare])
+(applytester 50 reduce-choice + {"3" 3 "4" 4 "5" 5} [keyfn dosquare skiperrs #t])
 
 ;;; CHOICE-MAX tests
 
@@ -811,7 +822,7 @@
 ;;; This can sometimes leak when optimized
 
 (define (test-x x) (has-suffix x {"X" "x"}))
-(optimize! test-x)
+(when (config 'testoptimized) (optimize! test-x))
 (applytest #f test-x "foo")
 (applytest #t test-x "arx")
 (applytest #f test-x "bar")

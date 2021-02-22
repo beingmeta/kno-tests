@@ -1,7 +1,5 @@
 (load-component "common.scm")
 
-(optimization-leaks)
-
 (define (balance-iter i up down)
   (if (= i 1) (- up down)
       (balance-iter (-1+ i) (1+ up) (1+ down))))
@@ -74,8 +72,8 @@
       (domerge-bug3 (cdr l1) (cons (car l1) l2))))
 
 (define (main)
-  (dbg main)
-  (%watch (smerge "ab" "c"))
+  ;;(dbg main)
+  ;;(%watch (smerge "ab" "c"))
   (applytest "bac" (smerge "ab" "c"))
   (applytest '(b a c) (domerge '(a b) '(c)))
   (countup 10000)

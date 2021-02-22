@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module 'bugjar/html)
+;;(use-module 'bugjar/html)
 
 (applytest exception? (catcherr (+ 2 'foo)))
 (applytest 5 (catcherr (+ 2 3)))
@@ -145,13 +145,13 @@
 		       (lambda (ex) "errobj")))
 (evaltest "errobj" (onerror (errfact 5)
 		       (lambda (ex) "errobj")))
-(evaltest '|BadBaseCase|
-	  (onerror (errfact 5)
-	      (lambda (ex)
-		(lineout (exception-summary ex))
-		(lineout (exception-summary ex #t))
-		(fileout "backtrace.html" (exception.html ex))
-		(get (exception->slotmap ex) 'condition))))
+;; (evaltest '|BadBaseCase|
+;; 	  (onerror (errfact 5)
+;; 	      (lambda (ex)
+;; 		(lineout (exception-summary ex))
+;; 		(lineout (exception-summary ex #t))
+;; 		(fileout "backtrace.html" (exception.html ex))
+;; 		(get (exception->slotmap ex) 'condition))))
 
 (errtest (onerror (errfact 5)
 	     (lambda (ex)

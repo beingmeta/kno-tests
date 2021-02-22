@@ -27,7 +27,11 @@
 (logwarn |Done| "After " (elapsed-time started) " seconds")
 
 (when (> (optimize/count-warnings) 0)
+  (logwarn |OptimizerWarnings| 
+    "There were " ($count (optimize/count-warnings) "warning"))
   (optimize/list-warnings)
-  (error |OptimizeWarnings|))
+  (set! trouble #t)
+  (error |OptimizerWarnings| optmods.scm #f
+    "There were " ($count (optimize/count-warnings) "warning")))
 
 (when trouble (exit 1))

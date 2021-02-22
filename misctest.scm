@@ -4,8 +4,6 @@
 
 (use-module '{kno/reflect binio varconfig text/stringfmts bench/randobj})
 
-(optimization-leaks)
-
 (applytest #t procedure? car)
 (applytest #f procedure? if)
 (applytest #f procedure? '())

@@ -49,7 +49,8 @@
 (define test-finished
   (macro expr
     (let ((name (get-arg expr 1)))
-      `(begin (deoptimize!)
+      `(begin ;;(deoptimize!)
+	 (deoptimize-bindings! (%bindings))
 	 (if (and (bound? errors) (exists? errors))
 	     (begin (message (choice-size errors) " errors during " ,name)
 	       (error 'tests-failed))
@@ -93,18 +94,18 @@
     (macro expr
       (if (pair? (cadr expr))
 	  `(begin (define ,@(cdr expr))
-	     (optimize! ,(car (cadr expr))))
+	     (optimize-procedure! ,(car (cadr expr))))
 	  `(define ,@(cdr expr)))))
   (define define-amb-tester
     (macro expr
       (if (pair? (cadr expr))
 	  `(begin (defambda ,@(cdr expr))
-	     (optimize! ,(car (cadr expr))))
+	     (optimize-procedure! ,(car (cadr expr))))
 	  `(defambda ,@(cdr expr)))))
   (define test-optimize! optimize!))
 
 (defambda (reftest obj thunk (optimize #f))
-  (when optimize (optimize! thunk))
+  (when (config 'testoptimized #f) (optimize! thunk))
   (let ((count (refcount obj)))
     (thunk)
     (applytest count refcount obj)))
