@@ -408,8 +408,8 @@
 
 ;;; Test pruning of frame-create
 
-(applytest #[x 3 y 4] frame-create 'x 3 'y 4)
-(applytest #[x 3 y 4] frame-create 'x 3 'y 4 'z {})
+(applytest #[x 3 y 4] frame-create #f 'x 3 'y 4)
+(applytest #[x 3 y 4] frame-create #f 'x 3 'y 4 'z {})
 
 ;;; Quasiquote oddness
 
