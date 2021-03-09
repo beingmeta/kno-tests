@@ -406,6 +406,11 @@
 (break-defaults 8 external-state)
 (evaltest #t (vector? external-state))
 
+;;; Test pruning of frame-create
+
+(applytest #[x 3 y 4] frame-create 'x 3 'y 4)
+(applytest #[x 3 y 4] frame-create 'x 3 'y 4 'z {})
+
 ;;; Quasiquote oddness
 
 (define-tester (splicetest)
