@@ -220,12 +220,22 @@
     answer))
 
 (let ((original (nrange 30 50)))
-  (dtype->file original "thirty2fifty")
-  (if (= (choice-size (intersection original
-				    (file->dtype "thirty2fifty")))
-	 (choice-size original))
-      (lineout "Sets seem to be dumped right")
-      (lineout "Sets seem to be dumped wrong"))) 
+  (when (file-exists?  "thirty2fifty.dtype") (remove-file "thirty2fifty.dtype"))
+  (when (file-exists?  "thirty2fifty.xtype") (remove-file "thirty2fifty.xtype"))
+  (dtype->file original "thirty2fifty.dtype")
+  (write-xtype original "thirty2fifty.xtype")
+  (cond ((and (= (choice-size (intersection original (file->dtype "thirty2fifty.dtype")))
+		 (choice-size original))
+	      (= (choice-size (intersection original (read-xtype "thirty2fifty.xtype")))
+		 (choice-size original)))
+	 (lineout "Sets seem to be dumped right"))
+	(else
+	 (when (not (= (choice-size (intersection original (read-xtype "thirty2fifty.dtype")))
+		       (choice-size original)))
+	   (logerr |ChoiceDType| "Sets seem to be dumped wrong"))
+	 (when (not (= (choice-size (intersection original (read-xtype "thirty2fifty.xtype")))
+		       (choice-size original)))
+	   (logerr |ChoiceXType| "Sets seem to be dumped wrong"))))) 
 ;(remove-file "thirty2fifty")
 
 (define dtype-test-obj
