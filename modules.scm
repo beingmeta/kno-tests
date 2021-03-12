@@ -41,14 +41,8 @@
 (errtest (within-module 'text/stringfmts (quotient~ 17 "three")))
 (errtest (within-module 'text/stringfmts (->exact (quotient~ 17 0))))
 
-(errtest (accessing-module 'testcapi (quotient~ zval 3)))
-(errtest (accessing-module))
-(errtest (accessing-module 'badmod (+ 3 4)))
-(errtest (accessing-module '(not a module) (+ 3 4)))
-
 (define zval 17)
 (errtest (within-module 'text/stringfmts (quotient~ zval 3)))
-(evaltest 5 (accessing-module 'text/stringfmts (quotient~ zval 3)))
 
 (evaltest #t (overlaps? (get-exports (get-module 'fileio)) 'open-output-file))
 (evaltest #t (overlaps? (get-exports (get-module 'text/stringfmts))

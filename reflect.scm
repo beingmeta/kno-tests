@@ -65,14 +65,17 @@
 (applytester "branch" procedure-documentation if)
 
 (applytest #t procedure-tailable? arity-test)
-(evaltest 'void (set-procedure-tailable! arity-test #f))
+(evaltest #t (set-procedure-tailable! arity-test #f))
 (applytest #f procedure-tailable? arity-test)
-(evaltest 'void (set-procedure-tailable! arity-test #t))
+(evaltest #t (set-procedure-tailable! arity-test #t))
 (errtest (set-procedure-tailable! #"packet" #f))
+(evaltest #f (set-procedure-tailable! car #t))
 
 (applytester pair? lambda-entry arity-test2)
 (errtest (procedure-tailable? if))
 (errtest (procedure-tailable? "three"))
+(errtest (set-procedure-tailable! if #t))
+(errtest (set-procedure-tailable! "three" #f))
 
 (applytest 'define car (lambda-source arity-test2))
 (errtest (applytest 'define car lambda-source arity-test2))

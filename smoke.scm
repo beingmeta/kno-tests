@@ -1,3 +1,6 @@
+(use-module 'kno/reflect)
+(use-module 'logger)
+
 (applytest 17 + 11 3 3)
 (evaltest 17 ( + 11 3 3))
 (define (p x y) (+ x y 17))

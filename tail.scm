@@ -6,6 +6,14 @@
 (define (balancer n)
   (if (= n 0) 0 (balance-iter n 0 0)))
 
+(define (nested-balance-iter i up down)
+  (let ((one 1) 
+	(next (- up down)))
+    (if (= i one) next
+	(nested-balance-iter (-1+ i) (1+ up) (1+ down)))))
+(define (nested-balancer n)
+  (if (= n 0) 0 (nested-balance-iter n 0 0)))
+
 (define (fib-iter i cur prev)
   (if (= i 1) cur (fib-iter (-1+ i) (+ cur prev) cur)))
 (define (fibi n)
@@ -15,6 +23,7 @@
   (applytest 0 balancer 100)
   ;; This should blow out the stack if tail recursion is broken
   (applytest 0 balancer 10000)
+  (applytest 0 nested-balancer 10000)
   (applytest 6765 fibi 20)
   (applytest 280571172992510140037611932413038677189525 fibi 200)
   (applytest 43466557686937456435688527675040625802564660517371780402481729089536555417949051890403879840079255169295922593080322634775209689623239873322471161642996440906533187938298969649928516003704476137795166849228875
