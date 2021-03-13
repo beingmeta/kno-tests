@@ -56,7 +56,9 @@
 (applytest indata (filedata dtype-file))
 
 (let ((obj (read (open-input-file text-file))))
+  (when (file-exists? temp-dtype-file) (remove-file temp-dtype-file))
   (dtype->file obj temp-dtype-file)
+  (when (file-exists? temp-ztype-file) (remove-file temp-ztype-file))
   (dtype->file obj temp-ztype-file)
   (applytest obj file->dtype temp-dtype-file)
   (applytest obj file->dtype temp-ztype-file)
