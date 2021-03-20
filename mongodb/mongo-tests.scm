@@ -1,6 +1,6 @@
 (use-module '{mongodb logger})
 
-(define db (mongo/open "mongodb://writer:none@localhost:7777/fdtest" ))
+(define db (mongo/open "mongodb://writer:none@localhost:7777/knotest" ))
 (define testing (collection/open db "testing"))
 (collection/remove! testing {#[a 3] #[a 4] #[a 5]})
 (collection/insert! testing #[a 3 b 8])

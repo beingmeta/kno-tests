@@ -13,29 +13,29 @@ db.createUser(
 	       { role: "root", db: "admin" } ]
   }
 )
-use fdtest;
+use knotest;
 db.createUser(
   {
     user: "root",
     pwd: "framerd",
-      roles: [ { role: "userAdmin", db: "fdtest" },
-	       { role: "dbAdmin", db: "fdtest" },
-	       { role: "readWrite", db: "fdtest" },
-	       { role: "dbOwner", db: "fdtest" } ]
+      roles: [ { role: "userAdmin", db: "knotest" },
+	       { role: "dbAdmin", db: "knotest" },
+	       { role: "readWrite", db: "knotest" },
+	       { role: "dbOwner", db: "knotest" } ]
   }
 )
 db.createUser(
   {
     user: "writer",
     pwd: "none",
-      roles: [ { role: "readWrite", db: "fdtest" } ]
+      roles: [ { role: "readWrite", db: "knotest" } ]
   }
 )
 db.createUser(
   {
     user: "reader",
     pwd: "none",
-      roles: [ { role: "read", db: "fdtest" } ]
+      roles: [ { role: "read", db: "knotest" } ]
   }
 )
 use admin;
