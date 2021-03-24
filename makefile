@@ -81,8 +81,19 @@ all_tests alltests: cleanlogs
 	make cmdtests
 	${header} "■■■■■■■■ Done with alltests";
 
+justcode run: cleanlogs
+	if [ -f ../.malloc ] && [ -f ../.buildmode ]; then \
+          malloc=`cat ../.malloc`; build=`cat ../.buildmode`; \
+	  echo "Running all non-db tests with malloc=$${malloc} and build=$${build}"; fi;
+	make libtests tables
+	make optimize_modules
+	make zipmods
+	make cmdtests
+	${header} "■■■■■■■■ Done with alltests";
+standard standard_tests wodb_tests wodbs wodb nodb nodbs: justcode
+
 smoke smoketest:
-	@${RUN} ${KNOX} smoke.scm ${RUNCONF}
+	@${RUN} ${KNOX} smoke.scm ${RUNCONF} TESTOPTIMIZED=${TESTOPTIMIZED}
 
 buildinfo:
 	if [ -f ../.malloc ] && [ -f ../.buildmode ]; then \
@@ -97,40 +108,42 @@ dbs: pools indexes
 cmdtests:
 	@echo "# ■■■■■■■■ Running command line tests ${RUNCONF}"
 	@echo "# ■■■ Various stderr log messages or termination warnings are normal"
-	make execscripts chainscripts batchscripts chained_batchscripts utilscripts
+	make execscripts chainscripts batchscripts chained_batchscripts dbscripts
 
 static-tests: schemetests optscheme loadmods optmods zipmods slotmaps tables pools indexes framedbs
-schemetests: r4rs choices sequences numbers regex xtypes compounds binio requests \
-	exceptions breaks errfns lambda tail conditionals iterators binders \
-	reflect hashsets eval loading modules quasiquote promises ffi configs opts appenv \
+schemetests: r4rs choices sequences numbers types regex xtypes compounds binio requests \
+	exceptions breaks errfns lambda tail conditionals iterators binders defines \
+	reflect hashsets eval loading modulefns quasiquote promises ffi configs opts appenv \
 	picktest cachecall texttools webtools timeprims sysprims startup stringprims \
 	i18n misc gctests gcoverflow profiler sqlite tail compress crypto \
 	fileprims xml
 optscheme optschemetests:
 	@${header} "■■■■■■■■ Running optimized scheme tests ${RUNCONF}"
 	make RUNCONF="TESTOPTIMIZED=yes ${RUNCONF}" \
-	  r4rs choices sequences misctest configs reflect eval lambda tail \
+	  r4rs choices sequences misctest configs types reflect eval lambda tail defines \
 	  exceptions picktest cachecall timeprims sysprims compounds i18n fileprims \
 	  numbers regex xml texttools eval binders conditionals errfns \
           requests gctests crypto gcoverflow
 	@${header} "■■■■■■■■ Completed optimized scheme tests ${RUNCONF}"
 ziptest: libscm.zip
 	@${header} "■■■■■■■■ Running scheme tests with zip sources ${RUNCONF}"
-	make RUNCONF="LIBSCM=libscm.zip ${RUNCONF}" \
+	make RUNCONF="LIBSCM=zip:libscm.zip ${RUNCONF}" \
 	  r4rs choices sequences misctest configs reflect eval lambda tail \
 	  exceptions picktest cachecall timeprims sysprims compounds i18n fileprims \
 	  numbers regex xml texttools eval binders conditionals errfns \
           requests gctests crypto gcoverflow
-	make RUNCONF="LIBSCM=libscm.zip TESTOPTIMIZED=yes ${RUNCONF}" \
+	make RUNCONF="LIBSCM=zip:libscm.zip TESTOPTIMIZED=yes ${RUNCONF}" \
 	  r4rs choices sequences misctest configs reflect eval lambda tail \
 	  exceptions picktest cachecall timeprims sysprims compounds i18n fileprims \
 	  numbers regex xml texttools eval binders conditionals errfns \
           requests gctests crypto gcoverflow
 	@${header} "■■■■■■■■ Completed optimized scheme tests ${RUNCONF}"
 libscm.zip: ../src/libscm/*.scm ../src/libscm/*/*.scm
-	cd ../src/libscm; zip -ry ../tests/libscm.zip *
+	cd ../src/libscm; zip -ry ../../tests/libscm.zip *
 
 core scheme: schemetests optschemetests threads slotmaps
+mods modules:
+	make loadmods && make optmods && make zipmods
 
 loadmods load_modules:
 	@${header} "■■■■■■■■ Testing default module loads ${RUNCONF}"
@@ -143,10 +156,10 @@ optmods optimize_modules:
 
 zipmods: load_modules
 	@${header} "■■■■■■■■ Testing module loads from zipfiles"
-	@${RUN} ${KNOX} LIBSCM=../src/libscm.zip LOADPATH=../src/stdlib.zip loadmods.scm ${RUNCONF}
+	@${RUN} ${KNOX} LIBSCM=zip:../src/libscm.zip LOADPATH=zip:../src/stdlib.zip loadmods.scm ${RUNCONF}
 	@${header} "■■■■■■■■ Finished testing  module loads from zipfiles"
 
-testmods: zipmods optmods
+testmods: zipmods loadmods optmods
 
 .PHONY: scheme schemetest schemetests optscheme loadmodes load_modules optmodes optimize_modules
 
@@ -169,6 +182,9 @@ sequences seqtest:
 	@${header} "■■■■ Completed sequences tests ${RUNCONF}"
 numbers:
 	@${RUN} ${KNOX} numbers.scm ${RUNCONF}
+	@${header} "■■■■ Completed numbers tests ${RUNCONF}"
+types:
+	@${RUN} ${KNOX} types.scm ${RUNCONF}
 	@${header} "■■■■ Completed numbers tests ${RUNCONF}"
 regex:
 	@${RUN} ${KNOX} regex.scm ${RUNCONF}
@@ -193,6 +209,9 @@ binio:
 	@${header} "■■■■ Completed binio tests ${RUNCONF}"
 eval:
 	@${RUN} ${KNOX} eval.scm ${RUNCONF}
+	@${header} "■■■■ Completed miscellaneous eval tests ${RUNCONF}"
+defines:
+	@${RUN} ${KNOX} defines.scm ${RUNCONF}
 	@${header} "■■■■ Completed miscellaneous eval tests ${RUNCONF}"
 xtypes:
 	@${RUN} ${KNOX} xtypes.scm ${RUNCONF}
@@ -226,7 +245,7 @@ sqlite:
 opts:
 	@${RUN} ${KNOX} opts.scm ${RUNCONF}
 	@${header} "■■■■ Completed opts tests ${RUNCONF}"
-modules:
+modulefns:
 	@${RUN} ${KNOX} modules.scm ${RUNCONF}
 	@${RUN} ${KNOX} modules.scm LOAD:TRACE=yes ${RUNCONF}
 	@${header} "■■■■ Completed module tests ${RUNCONF}"
@@ -369,9 +388,9 @@ kpoolzstdtest:
 	@make TESTBASE=kpoolzstd RUNCONF="${KPOOL} ${ZSTD} ${RUNCONF}" pooltest
 
 leveldbpools leveldbpooltests:
-	@make TESTBASE=leveldb RUNCONF="SLOTCODES=#f POOLTYPE=leveldb POOLMOD=leveldb ${RUNCONF}" pooltest
+	@make TESTBASE=leveldb RUNCONF="SLOTCODES=#f POOLTYPE=leveldb:pool ${RUNCONF}" pooltest
 rocksdbpools rocksdbpooltests:
-	@make TESTBASE=rocksdb RUNCONF="SLOTCODES=#f POOLTYPE=rocksdb POOLMOD=rocksdb ${RUNCONF}" pooltest
+	@make TESTBASE=rocksdb RUNCONF="SLOTCODES=#f POOLTYPE=rocksdb:pool ${RUNCONF}" pooltest
 
 kpools kpooltests: kpooltest kpool32test kpool64test kpoolztest \
         kpoolsnappytest kpoolzstdtest
@@ -473,6 +492,9 @@ framedb_logindex:
 	@make TESTBASE=tmplogindex RUNCONF="${KPOOL} ${LOGINDEX} ${OFFB40}" framedb
 framedb_consindex:
 	@make TESTBASE=tmpkpool40cx RUNCONF="${KPOOL} ${KINDEX} ${OFFB40} CONSINDEX=yes" framedb
+# This exercise the logging architecture, including libu8 output
+framedb_logged:
+	@make TESTBASE=tmplogpool RUNCONF="${KPOOL} ${KINDEX} ${OFFB40} DBLOGLEVEL=debug" framedb
 
 framedb40:
 	@make TESTBASE=tmpknodb40 RUNCONF="${KPOOL} ${KINDEX} ${OFFB40}" framedb
@@ -509,7 +531,7 @@ rocksdb rocksdbtests: rocksdbpools rocksdbindexes
 
 # Scripting tests
 
-scripts: chainscripts batchscripts atexit_tests utilscripts
+scripts: chainscripts batchscripts atexit_tests dbscripts
 
 execscripts:
 	@${header} "■■■■■■■■ Running exec tests ■■■■■■■■"
@@ -583,7 +605,7 @@ atexit_kill: atexit_normal
 
 # Builtin script tests
 
-utilscripts: pack-index split-index
+dbscripts: pack-index split-index packtests
 
 pack-index:
 	@${header} "■■■■■■■■ Testing repack index"
@@ -596,6 +618,21 @@ split-index:
 	@${header} "■■■■■■■■ Testing split index"
 	@rm -f unique.index split.index
 	@${RUN} ${KNOX} ${SPLITINDEX} data/misc.index split.index UNIQUE=unique.index OVERWRITE=yes TESTLOAD=common.scm ${RUNCONF};
+
+packtest packtests:
+	@${header} "■■■■■■■■ Running db packing tests"
+	@rm -rf packtest.pool packtest.index packhead.index packtail.index
+	@${RUN} ${KNOX} framedb.scm packtest init \
+		COUNT=${TESTSIZE} ${FRAMEDB_FILES} \
+		${RUNCONF};
+	@${RUN} ${KNOX} knodb/actions/packpool packtest.pool
+	@${RUN} ${KNOX} knodb/actions/packindex packtest.index
+	@${RUN} ${KNOX} framedb.scm packtest COUNT=${TESTSIZE} ${RUNCONF} CACHELEVEL=2;
+	@${RUN} ${KNOX} knodb/actions/splitindex packtest.index packhead.index packtail.index
+	@rm -f packhead.* packtail.*
+	@${RUN} ${KNOX} knodb/actions/splitindex packtest.index packhead.index packtail.index 2
+	@rm -f packhead.* packtail.*
+	@${RUN} ${KNOX} knodb/actions/splitindex packtest.index packhead.index packtail.flexindex
 
 .PHONY: chained_batchscripts batchscripts chainscripts execscripts atexit
 

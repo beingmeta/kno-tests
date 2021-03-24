@@ -1,4 +1,4 @@
-(use-module 'kno/reflect)
+(use-module 'reflection)
 (use-module 'logger)
 
 (applytest 17 + 11 3 3)

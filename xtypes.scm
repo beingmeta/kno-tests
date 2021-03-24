@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{kno/reflect io/binary varconfig text/stringfmts bench/randobj})
+(use-module '{reflection io/binary varconfig text/stringfmts bench/randobj})
 
 (define xtype-test-obj
   `(#[foo 3 bar 8] #"12\0645\14789\253cdef123\105\14789"
@@ -32,9 +32,11 @@
 (let* ((all (make-xtype-test-objects 42))
        (xtype1 (encode-xtype (qc all)))
        (xtype2 (write-xtype (qc all) #f))
+       (xtype3 (precode-xtype (qc all) #f))
        (embed-opts [xrefs '{alpha_slot beta_slot gamma_slot delta_slot epsilon_slot phi_slot} embed #t])
        (extype1 (encode-xtype (qc all) embed-opts))
-       (extype2 (write-xtype (qc all) #f embed-opts)))
+       (extype2 (write-xtype (qc all) #f embed-opts))
+       (extype3 (precode-xtype (qc all) embed-opts)))
   (applytest #t equal? xtype1 xtype2)
   (applytest #t equal? extype1 extype2)
   (applytest #t < (length extype1) (length xtype1)))

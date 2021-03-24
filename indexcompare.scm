@@ -73,4 +73,4 @@
    (open-index yfile #[readonly #t cachelevel 2])
    (config 'NKEYS 512 config:boolean+parse)))
 
-(when (config 'optimize #t) (optimize!))
+(when (config 'optimize #t) (optimize-locals!))

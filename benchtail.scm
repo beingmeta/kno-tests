@@ -21,7 +21,7 @@
 	(message "(balancer " n ") x " cycles " in " (secs->string runtime #f))
 	))))
 
-(optimize!)
+(optimize-locals!)
 
 (define main fibtest)
 

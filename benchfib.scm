@@ -2,7 +2,7 @@
 ;;; -*- Mode: Scheme; -*-
 
 (use-module '{bench/miscfns optimize logger 
-	      kno/reflect varconfig text/stringfmts})
+	      reflection varconfig text/stringfmts})
 (config! 'optlevel 4)
 (config! 'optimize:keepsource #f)
 
@@ -39,6 +39,6 @@
 (when (config 'optimized #t config:boolean)
   (logwarn |Optimizing| (get-source))
   (optimize! 'bench/miscfns)
-  (optimize!))
+  (optimize-locals!))
 
 (define main fibtest)

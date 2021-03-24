@@ -126,5 +126,5 @@
 	(dealer (zmq/listen workers 'dealer)))
     (zmq/proxy! router dealer)))
 
-(optimize!)
+(optimize-locals!)
 

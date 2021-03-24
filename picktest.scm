@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module 'kno/reflect)
+(use-module 'reflection)
 
 (define things {#[x 3 y 4] #[x 2 y 8]})
 

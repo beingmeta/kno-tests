@@ -3,7 +3,7 @@
 (load-component "common.scm")
 
 (use-module '{texttools ezrecords bench/miscfns optimize stringfmts})
-(use-module '{kno/reflect kno/profile})
+(use-module '{reflection kno/profile})
 
 (define swapf
   (macro expr 
@@ -13,7 +13,7 @@
 	 (set! ,arg1 ,arg2)
 	 (set! ,arg2 tmp)))))
 
-(applytester 'kno/reflect procedure-module procedure-module)
+(applytester 'reflection procedure-module procedure-module)
 (applytester 'scheme procedure-module *)
 (applytester 'texttools procedure-module textsubst)
 (applytester 'bench/miscfns procedure-module fibi)
@@ -45,12 +45,12 @@
 
 (errtest (apropos 99))
 
-(errtest (set-lambda-args! "foo" '(x (y 5))))
-(errtest (set-lambda-body! "foo" '(x (y 5))))
+;; (errtest (set-lambda-args! "foo" '(x (y 5))))
+;; (errtest (set-lambda-body! "foo" '(x (y 5))))
 
 (applytest '(x (y 3)) lambda-args arity-test)
-(set-lambda-args! arity-test '(x (y 5)))
-(applytest '(x (y 5)) lambda-args arity-test)
+;; (set-lambda-args! arity-test '(x (y 5)))
+;; (applytest '(x (y 5)) lambda-args arity-test)
 
 (errtest (procedure-arity if))
 (errtest (procedure-arity defrecord))
@@ -85,7 +85,7 @@
 (applytest 'err lambda-args "#packet")
 (applytest 'err lambda-env "#packet")
 (applytest 'err lambda-body "#packet")
-(applytest 'err set-lambda-args! "#packet" '(bytes))
+;;(applytest 'err set-lambda-args! "#packet" '(bytes))
 (applytest 'err set-lambda-source! "#packet" (cons 'defslambda (cdr (lambda-source arity-test2))))
 
 (set-lambda-source! arity-test2 (cons 'defslambda (cdr (lambda-source arity-test2))))
@@ -182,7 +182,7 @@
 (applytester (contains-string "conditionals.c") procedure-filename if)
 (applytester (contains-string "miscfns.scm") module-source (get-module 'bench/miscfns))
 ;;; This doesn't return the correct value
-(applytester string? module-source (get-module 'kno/reflect))
+(applytester string? module-source (get-module 'reflection))
 (errtest (module-source 5))
 (applytester #f module-source #[])
 (applytester #f module-source (make-hashtable))
@@ -194,9 +194,7 @@
 (applytester #f synchronized? car)
 (applytester #f synchronized? contains-string)
 
-(applytester (contains-string "engine.scm") get-source (get-module 'engine))
 (applytester (contains-string "sqlite.") get-source (get-module 'sqlite))
-(applytester (contains-string "engine.scm") get-source (get (get-module 'engine) 'engine/run))
 (applytester (contains-string "sqlite.") get-source (get (get-module 'sqlite) 'sqlite/open))
 (applytester (contains-string "iterators.c") get-source dolist)
 (applytester string? get-source swapf)
@@ -264,7 +262,7 @@
 
 (applytester ambiguous? module-exported 'bench/miscfns)
 (applytester ambiguous? module-exported (get-module 'bench/miscfns))
-(applytester ambiguous? module-exported (get-module 'kno/reflect))
+(applytester ambiguous? module-exported (get-module 'reflection))
 (errtest (module-exported #f))
 (applytester '{x y} module-exported #[x 3 y 4])
 (errtest (module-exported "bench/miscfns"))
@@ -311,7 +309,7 @@
 (errtest (defimport))
 (errtest (defimport "rrzy"))
 (errtest (defimport rrzy))
-(errtest (defimport rrzy (get-module 'kno/reflect)))
+(errtest (defimport rrzy (get-module 'reflection)))
 (errtest (defimport rrzy (get-module 'bench/miscfns)))
 (errtest (defimport rrzy 'nosuchmodule))
 

@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{kno/reflect binio varconfig text/stringfmts bench/randobj})
+(use-module '{reflection binio varconfig text/stringfmts bench/randobj})
 
 (applytest #t procedure? car)
 (applytest #f procedure? if)
@@ -487,9 +487,9 @@
   "so it's relatively generic."
   (+ x y))
 
-(applytest "`(add2numbers x y)`\nThis procedure adds 2 numbers and returns the result"
+(applytest "This procedure adds 2 numbers and returns the result"
 	   procedure-documentation add2numbers)
-(applytest "`(add2numbers.longdoc x y)`\nThis procedure adds 2 numbers and returns the result.\nIt uses the underlying +/-/etc arithmetic operators, \nso it's relatively generic."
+(applytest "This procedure adds 2 numbers and returns the result.\nIt uses the underlying +/-/etc arithmetic operators, \nso it's relatively generic."
 	   procedure-documentation add2numbers.longdoc)
 
 ;; This checks a bug where errors in an else were ignored
@@ -637,6 +637,33 @@
 (errtest (applytest bad-relation 9 + 2 3))
 
 (errtest (evaltest))
+
+;;; Test various read macros
+
+(define x 33)
+#|
+(define x 88)
+|#
+(applytest 44 + x 11)
+#|
+(define x (* 3 "four"))
+|#
+#|
+#| embedded |#
+(define x (* 3 "four"))
+|#
+(set! x 11)
+
+(config! 'features 'misctest)
+
+(define y #+misctest 8 7)
+(applytest 88 * x y)
+(set! y #+nomisctest 8 7)
+(applytest 77 * x y)
+(set! y #-misctest 4 5)
+(applytest 55 * x y)
+(set! y #-nomisctest 4 5)
+(applytest 44 * x y)
 
 ;;; Gather errors
 

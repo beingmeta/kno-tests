@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{fileio logger kno/reflect varconfig})
+(use-module '{fileio logger reflection varconfig})
 
 (config! 'CHECKDTSIZE #t)
 
@@ -42,7 +42,6 @@
 	 (let* ((make-opts 
 		 (frame-create #f
 		   'type pooltype
-		   'module (or (config 'poolmod #f #t) {})
  		   'compression compression
 		   'base @b001/0 
 		   'capacity 100000
@@ -133,8 +132,7 @@
 	  (remove-file (adjfile poolfile)))))
   (let* ((init (not (file-exists? poolfile)))
 	 (pool (get-pool poolfile (frame-create #f
-				    'type pooltype 'readonly (not init)
-				    'module (or (config 'poolmod #f #t) {})))))
+				    'type pooltype 'readonly (not init)))))
     (if init
 	(logwarn |FreshPool| pool)
 	(logwarn |ExistingPool| pool))

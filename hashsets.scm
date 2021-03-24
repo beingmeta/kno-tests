@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module 'kno/reflect)
+(use-module 'reflection)
 
 (define hs1 (make-hashset))
 

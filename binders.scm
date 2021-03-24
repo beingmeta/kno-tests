@@ -79,3 +79,12 @@
 (errtest (let ((x 3)) (defimport $count 'text/stringfmts)))
 (errtest (defimport $count-chocula 'text/stringfmts))
 
+;;; Defaults and locals
+
+(define-tester (addbar x (y))
+  ;; Check for leaks when the default value was actually provided
+  (default! y (dbg (deep-copy "bar")))
+  (glom x y))
+(applytester "foobar" addbar "foo" "bar")
+(applytester "foobaz" addbar "foo" "baz")
+(applytester "foobar" addbar "foo")

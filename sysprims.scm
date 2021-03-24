@@ -46,7 +46,8 @@
   (and (string? string) (textmatch ipv4 string)))
 
 (applytest string? gethostname)
-(applytest ip-addr? hostaddrs "beingmeta.com")
+(unless (or (config 'offline) (config 'dnsbroke))
+  (applytest ip-addr? hostaddrs "beingmeta.com"))
 ;; This doesn't work if the DNS is configured to map invalid hostnames somewhere
 ;;(applytester {} hostaddrs "beingmeta.cox")
 

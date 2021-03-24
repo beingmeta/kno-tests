@@ -6,7 +6,8 @@
 
 (check-modules 'bench)
 
-(check-modules '{kno/sessions kno/profiling kno/primdecls kno/mttools kno/threads})
+(check-modules '{kno/sessions kno/profiling kno/primdecls kno/mttools kno/threads
+		 kno/statefiles kno/debug kno/exec kno/reflect})
 
 (check-modules '{knodb
 		 knodb/adjuncts knodb/branches knodb/countrefs

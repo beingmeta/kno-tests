@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{kno/reflect text/stringfmts optimize})
+(use-module '{reflection text/stringfmts optimize})
 
 (when (config 'testoptimized) (optimize! 'text/stringfmts))
 
@@ -24,11 +24,10 @@
 (errtest ((ambda) 8))
 (errtest ((nlambda)))
 (errtest ((slambda) 8))
-(errtest ((sambda) 8))
 
-(applytest #t procedure? (def (times p q) (* p q)))
-(applytest #t procedure? (def ("times" p q) (* p q)))
-(applytest #t non-deterministic? (defamb ("times" p q) (* p q)))
+(applytest #t procedure? (defn (times p q) (* p q)))
+(applytest #t procedure? (defn ("times" p q) (* p q)))
+(applytest #t non-deterministic? (nchoicefn ("times" p q) (* p q)))
 
 (applytest 5 (nlambda 'take5 (n) (+ 2 n)) 3)
 (applytest 5 (nlambda "take5" (n) (+ 2 n)) 3)
@@ -98,7 +97,7 @@
 (errtest (defambda (bad-def x "y" (z)) (+ x 3)))
 
 (errtest (der (bad-def x "y" (z)) (+ x 3)))
-(errtest (defamb (bad-def x "y" (z)) (+ x 3)))
+(errtest (nchoicefn (bad-def x "y" (z)) (+ x 3)))
 (errtest (defsync (bad-def x "y" (z)) (+ x 3)))
 
 ;;; XAPPLY

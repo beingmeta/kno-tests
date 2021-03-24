@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module '{ezrecords kno/reflect text/stringfmts})
+(use-module '{ezrecords reflection text/stringfmts})
 
 (define have-defmacro (get-module 'defmacro))
 
@@ -208,7 +208,7 @@
 (applytest 10 add32 7 3)
 (errtest (add32 7))
 
-;;; Kno/Reflect like tests
+;;; Reflection like tests
 
 (applytester #t string? (lisp->string if))
 (applytester #t packet? (dtype->packet if))
@@ -524,7 +524,6 @@
 (errtest (lambda))
 (errtest (ambda))
 (errtest (slambda))
-(errtest (sambda))
 (errtest (define))
 (errtest (define foo))
 (errtest (define ("foo")))
@@ -667,7 +666,7 @@
 (errtest (let ((x 3)) (define-local car)))
 (errtest (let ((x 3)) (define-init y 9)))
 (errtest (let ((x 3)) (defslambda (y z) 3)))
-(errtest (let ((x 3)) (defamba (y z) 3)))
+(errtest (let ((x 3)) (defambda (y z) 3)))
 
 (errtest (define zzy (+ 3 "four")))
 
@@ -694,7 +693,7 @@
 (errtest (nlambda "fcn"))
 (errtest (nlambda (glom "fcn" usename)))
 
-(define test-def (def (td x y) (+ x y)))
+(define test-def (defn (td x y) (+ x y)))
 (applytester #t applicable? test-def)
 (applytester #t procedure? test-def)
 (applytester #f non-deterministic? test-def)
@@ -703,9 +702,9 @@
 (applytester "td" procedure-name test-def)
 (applytester 'td procedure-symbol test-def)
 (evaltest #f (bound? testfn))
-(errtest (def "fcn" (+ 2 3)))
-(errtest (def fcn (+ 2 3)))
-(errtest (def (3 x) (+ 2 3)))
+(errtest (defn "fcn" (+ 2 3)))
+(errtest (defn fcn (+ 2 3)))
+(errtest (defn (3 x) (+ 2 3)))
 
 (define test-defsync (defsync (td x y) (+ x y)))
 (applytester #t applicable? test-defsync)
@@ -717,7 +716,7 @@
 (applytester 'td procedure-symbol test-defsync)
 (evaltest #f (bound? testfn))
 
-(define test-defamb (defamb (td x y) (+ x y)))
+(define test-defamb (nchoicefn (td x y) (+ x y)))
 (applytester #t applicable? test-defamb)
 (applytester #t procedure? test-defamb)
 (applytester #t non-deterministic? test-defamb)
@@ -727,7 +726,7 @@
 (applytester 'td procedure-symbol test-defamb)
 (evaltest #f (bound? testfn))
 
-(define test-sappend (def (string-append x (y "something")) (append x y)))
+(define test-sappend (defn (string-append x (y "something")) (append x y)))
 (applytester "foobar" test-sappend "foo" "bar")
 (applytester "foosomething" test-sappend "foo")
 (errtest (test-sappend))
@@ -760,7 +759,7 @@
   "It adds them"
   (+ x y))
 (applytest 
- "`(test-docstrings x y)`\nThis takes two arguments\nThey can be anything\nIt adds them"
+ "This takes two arguments\nThey can be anything\nIt adds them"
  documentation test-docstrings)
 (set! test-docstrings #f)
 (define-tester (test-docstrings x y . more)
@@ -769,7 +768,7 @@
   "It adds them and conses them to all the others"
   (cons (+ x y) more))
 (applytest 
- "`(test-docstrings x y [more...])`\nThis takes at least two arguments\nThey can be anything\nIt adds them and conses them to all the others"
+ "This takes at least two arguments\nThey can be anything\nIt adds them and conses them to all the others"
  documentation test-docstrings)
 (set! test-docstrings #f)
 

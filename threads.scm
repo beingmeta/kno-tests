@@ -229,7 +229,7 @@
 (defimport fifo-condvar 'fifo)
 
 (define-tester (test-fifo-condvars)
-  (let ((fifo (fifo/make #[fillfn #f]))
+  (let ((fifo (fifo/make #[readonly #f]))
 	(generated (make-hashset))
 	(seen (make-hashset))
 	(gen-threads {})

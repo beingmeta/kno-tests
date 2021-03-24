@@ -4,7 +4,11 @@
 ;; (fileout (glom (getppid) "." (getpid)  ".started") 
 ;;   (config 'sessionid) "\n" (config 'cmdline))
 
-(use-module '{kno/reflect varconfig optimize logger})
+(use-module 'logger)
+(when (file-exists? (get-component "test.cfg"))
+  (logwarn |LoadingConfig| "From " (get-component "test.cfg"))
+  (load-config (get-component "test.cfg")))
+(use-module '{reflection varconfig optimize})
 
 (define started (elapsed-time))
 (define logtime-file #f)
@@ -16,6 +20,9 @@
       "\t" (elapsed-time started)
       "\t" (doseq (arg (config 'argv)) (printout " " arg)))))
 (config! 'atexit save-elapsed-atexit)
+
+(when (and (getenv "TESTOPTIMIZED") (not (empty-string? (getenv "TESTOPTIMIZED"))))
+  (config! 'testoptimized #t))
 
 (define fix61 (> (config 'maxfix) (* 256 256 256 256)))
 
@@ -117,6 +124,4 @@
   (define define-tester define)
   (define define-amb-tester defambda)
   (define test-optimize! comment))
-
-
 

@@ -13,4 +13,4 @@
 (define (main)
   (lineout (make-list-iter 15)))
 
-(optimize!)
+(optimize-locals!)

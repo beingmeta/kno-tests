@@ -3,7 +3,7 @@
 
 (load-component "common.scm")
 
-(use-module 'kno/reflect)
+(use-module 'reflection)
 
 (define (simplify-arg arg)
   (if (and (string? arg) (position #\/ arg)

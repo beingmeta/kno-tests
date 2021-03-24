@@ -2,7 +2,7 @@
 
 (load-component "common.scm")
 
-(use-module 'kno/reflect)
+(use-module 'reflection)
 
 (optimization-leaks)
 
