@@ -62,6 +62,8 @@
 (applytester (choice 20 21 22 23 24 25 26 27 28 29) dointersect
 	     (nrange 0 30) (nrange 20 40))
 
+(applytester {} intersection 3 4)
+
 (dotimes (i 5)
   (applytester (choice 20 21 22 23 24 25 26 27 28 29) dointersect
 	       zero-30 (nrange 20 40))
