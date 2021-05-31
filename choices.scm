@@ -842,20 +842,12 @@
 
 ;;; Bigger sets
 
-(define big-choice-size 20000)
+(define big-choice-size 30000)
 
 (message "Running bigtest #1")
 
-(define big1 (difference (random-choice big-choice-size) {3 14 15}))
-
-(applytester {} difference big1 big1)
-(applytester {3 14 15} difference {3 14 15} big1)
-(applytester big1 difference big1 {3 14 15})
-
-(dotimes (i 5)
-  (message "Running bigtest #" (+ i 2))
-  (let* ((bigchoice (random-choice big-choice-size))
-	 (removed (sample-n bigchoice 42))
+(defambda (test-bigchoice bigchoice)
+  (let* ((removed (sample-n bigchoice 42))
 	 (usechoice (difference bigchoice removed))
 	 (removed2 (sample-n removed 17)))
     (applytest {} difference usechoice usechoice)
@@ -863,24 +855,23 @@
     (applytest usechoice difference usechoice removed)
     (applytest removed2 difference removed2 usechoice)))
 
-(message "Running bigtest (cons) #1")
-
-(define cbig1 (difference (random-string-choice big-choice-size) {3 14 15}))
-
-(applytester {} difference cbig1 cbig1)
-(applytester (number->string {3 14 15}) difference (number->string {3 14 15}) cbig1)
-(applytester cbig1 difference cbig1 (number->string {3 14 15}))
+(dotimes (i 5)
+  (message "Running bigtest #" (+ i 1))
+  (test-bigchoice (random-choice big-choice-size)))
 
 (dotimes (i 5)
-  (message "Running bigtest (cons) #" (+ i 2))
-  (let* ((bigchoice (random-string-choice big-choice-size))
-	 (removed (sample-n bigchoice 42))
-	 (usechoice (difference bigchoice removed))
-	 (removed2 (sample-n removed 17)))
-    (applytest {} difference usechoice usechoice)
-    (applytest removed difference removed usechoice)
-    (applytest usechoice difference usechoice removed)
-    (applytest removed2 difference removed2 usechoice)))
+  (message "Running bigtest (cons) #" (+ i 1))
+  (test-bigchoice (random-string-choice big-choice-size)))
+
+(config! 'bigchoice 10000)
+
+(dotimes (i 5)
+  (message "Running bigtest (bigsort) #" (+ i 1))
+  (test-bigchoice (random-choice big-choice-size)))
+
+(dotimes (i 5)
+  (message "Running bigtest (cons/bigsort) #" (+ i 1))
+  (test-bigchoice (random-string-choice big-choice-size)))
 
 ;;; Fix-choice should never be neccessary
 (applytest {"one" #(two) #"three"} %fixchoice {"one" #(two) #"three"})
