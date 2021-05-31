@@ -36,6 +36,17 @@
 	(set+! answer (random numrange))))
     (pick-n answer n)))
 
+(define-tester (random-string-choice n (numrange))
+  (default! numrange (config 'fixmax (* n 8)))
+  (when (and (config 'int_max) (> numrange (config 'int_max)))
+    (set! numrange (config 'int_max)))
+  (let ((answer {}))
+    (dotimes (i n) (set+! answer (number->string (random numrange))))
+    (while (< (choice-size answer) n)
+      (dotimes (i (* 2 (- n (choice-size answer))))
+	(set+! answer (number->string (random numrange)))))
+    (pick-n answer n)))
+
 (define-tester (nrange start end)
   (let ((answer {}))
     (dotimes (i (- end start))
@@ -852,7 +863,41 @@
     (applytest usechoice difference usechoice removed)
     (applytest removed2 difference removed2 usechoice)))
 
+(message "Running bigtest (cons) #1")
+
+(define cbig1 (difference (random-string-choice big-choice-size) {3 14 15}))
+
+(applytester {} difference cbig1 cbig1)
+(applytester (number->string {3 14 15}) difference (number->string {3 14 15}) cbig1)
+(applytester cbig1 difference cbig1 (number->string {3 14 15}))
+
+(dotimes (i 5)
+  (message "Running bigtest (cons) #" (+ i 2))
+  (let* ((bigchoice (random-string-choice big-choice-size))
+	 (removed (sample-n bigchoice 42))
+	 (usechoice (difference bigchoice removed))
+	 (removed2 (sample-n removed 17)))
+    (applytest {} difference usechoice usechoice)
+    (applytest removed difference removed usechoice)
+    (applytest usechoice difference usechoice removed)
+    (applytest removed2 difference removed2 usechoice)))
+
 ;;; Fix-choice should never be neccessary
 (applytest {"one" #(two) #"three"} %fixchoice {"one" #(two) #"three"})
+
+;;; Evaluating choice sorting
+
+(comment (use-module '{optimize bench reflection bench/randobj})
+	 (optimize! '{bench bench/randobj})
+	 ;; These test the time to sort big sets and could be used
+	 ;;  to set the BIGCHOICE config/define
+	 ;; (define ix (open-index "~/wikidcoreraw.index"))
+	 ;; (define (get-nouns) (find-frames ix 'type 'noun))
+	 ;; (bench [repeat 100 cleanup swapout] get-nouns)
+	 (define (oidvec-generator n) (lambda () (list (random-oidvec n))))
+	 (define (sortoids vec) (elts vec))
+	 (optimize! {oidvec-generator sortoids})
+	 ;; (bench [repeat 10 getargs (oidvec-generator 301000)] sortoids)
+	 )
 
 (test-finished "CHOICETEST")
