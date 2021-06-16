@@ -338,6 +338,18 @@
 
 (applytester {} pick-one {})
 
+;;; TRYIF
+
+(define temp-state 17)
+
+(define (different? x)
+  (if (equal? x temp-state) #f
+      (begin (set! temp-state x) #t)))
+
+(evaltester #f (different? 17))
+(evaltester #t (different? 20))
+(evaltester 'worked (tryif (different? 42) 'worked))
+
 ;;; Try-choices
 
 (evaltester 9 (try-choices (e {4 6 8 9} i) (tryif (odd? e) e)))
