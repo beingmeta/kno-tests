@@ -14,6 +14,8 @@
 (define sepindex {})
 (varconfig! sepindex sepindex #f choice)
 
+(define use-background #f)
+
 (define threaded #f)
 (varconfig! THREADED threaded)
 
@@ -55,6 +57,7 @@
 			   'register (getopt opts 'register
 					     (not (config 'consindex (config 'consdb #f config:boolean))))
 			   'offtype (getopt opts 'offtype (config 'pooloff (or (config 'offtype) {})))
+			   'covers (tryif (config 'INDEXCOVERS) (qc))
 			   'slotcodes (config 'slotcodes 16)
 			   'oidcodes (config 'oidcodes 16))
 			 opts)))
@@ -77,7 +80,8 @@
 
 (defambda (combine-indexes indexes)
   (if (< (choice-size indexes) 2)
-      indexes
+      (begin (set! use-background #t)
+	(use-index indexes))
       (make-aggregate-index indexes)))
 
 (define (initdb source (opts #f))
@@ -292,6 +296,8 @@
 	 (exprsval (get-contents-as-choice filename)))
     
     (applytest frame find-frames index 'filename filename)
+    (when use-background
+      (applytest frame ?? 'filename filename))
     
     (applytest #t test frame 'contents-as-string)
     (applytest #t test frame 'contents-as-string stringval)

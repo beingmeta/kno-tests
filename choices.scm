@@ -852,6 +852,13 @@
 (applytest #t test-x "arx")
 (applytest #f test-x "bar")
 
+;;; Some choice/hashset tests
+
+(let* ((v1 (random-string-choice 1000))
+       (v2 (pick-n v1 500))
+       (h2 (choice->hashset v2)))
+  (evaltester #t (exists? (pick v1 h2))))
+
 ;;; Bigger sets
 
 (define big-choice-size 30000)
