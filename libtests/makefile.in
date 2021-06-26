@@ -77,9 +77,7 @@ SHAREDBIN=\
 
 # Note that we don't add @suffix@ to these executables because they're
 # never installed
-%: %.c ../../lib/libknodrivers@suffix@.a 	\
-	../../lib/libknostorage@suffix@.a 		\
-	../../lib/libknocore@suffix@.a
+%: %.c ../../lib/libkno@suffix@.a
 	@echo MKTEST_STATIC $@
 	@$(CC) $(CFLAGS) $(EXEFLAGS) @STATICLDFLAGS@ $(LDFLAGS) $(EXELIBS) -o $@ $^ \
 		$(LIBS) $(EXELIBS)
@@ -88,7 +86,7 @@ SHAREDBIN=\
 %.shared: %.c
 	@echo MKTEST_SHARED $@
 	@$(CC) $(CFLAGS) $(EXEFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS) $(EXELIBS) \
-		-lknocore@suffix@ -lknostorage@suffix@ -lknodrivers@suffix@ $(LIBS) $(EXELIBS)
+		-lkno@suffix@ $(LIBS) $(EXELIBS)
 
 # Targets
 
@@ -341,16 +339,10 @@ allindextests: fileindextests netindextests
 
 # Note that we don't add @suffix@ to these executables because they're
 # never installed
-$(TESTBIN): ../../lib/libknodrivers@suffix@.a 	\
-	../../lib/libknostorage@suffix@.a 		\
-	../../lib/libknocore@suffix@.a
+$(TESTBIN): ../../lib/libkno@suffix@.a
 
-../../lib/libknocore@suffix@.a:
-	cd ../..; make lib/libknocore@suffix@.a
-../../lib/libknostorage@suffix@.a:
-	cd ../..; make lib/libknostorage@suffix@.a
-../../lib/libknodrivers@suffix@.a:
-	cd ../..; make lib/libknodrivers@suffix@.a
+../../lib/libkno@suffix@.a:
+	cd ../..; make lib/libkno@suffix@.a
 
 testclean:
 	@rm -f *.data *.dump *.table *.sorted
